@@ -745,7 +745,7 @@ section {
 }
 
 /* Toggle states */
-.registration-section[data-closed="1"] .registration-card {
+.registration-section[data-closed="0"] .registration-card {
   display: none;
 }
 
@@ -754,12 +754,12 @@ section {
 }
 
 .registration-section:not([data-closed]) .registration-card,
-.registration-section[data-closed="0"] .registration-card {
+.registration-section[data-closed="1"] .registration-card {
   display: block;
 }
 
 .registration-section:not([data-closed]) .registration-closed,
-.registration-section[data-closed="0"] .registration-closed {
+.registration-section[data-closed="1"] .registration-closed {
   display: none;
 }
 
