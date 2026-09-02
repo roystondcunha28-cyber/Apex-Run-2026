@@ -250,6 +250,7 @@ body::before {
 @keyframes wipeRight { to { transform: scaleX(0); } }
 
 
+
 /* ==============================
    NAVBAR
 ============================== */
@@ -349,6 +350,70 @@ body::before {
   color: var(--cyan);
 }
  
+/* ---- Organizers dropdown ---- */
+.nav-dropdown {
+  position: relative;
+}
+ 
+.nav-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+ 
+.caret {
+  font-size: 0.65rem;
+  transition: transform 0.35s var(--ease-cinematic);
+}
+ 
+.nav-dropdown.is-open .caret {
+  transform: rotate(180deg);
+}
+ 
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  min-width: 230px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: linear-gradient(160deg, #001327, #000814 80%);
+  border: 1px solid rgba(0,255,255,0.15);
+  border-radius: 14px;
+  box-shadow: 0 24px 55px rgba(0,0,0,0.55);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-cinematic), visibility 0.3s ease;
+  z-index: 1005;
+}
+ 
+.nav-dropdown.is-open .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+ 
+.nav-dropdown-link {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.85);
+  transition: background 0.25s ease, color 0.25s ease, padding-left 0.25s ease;
+}
+ 
+.nav-dropdown-link:hover {
+  background: rgba(0,255,255,0.08);
+  color: var(--cyan);
+  padding-left: 18px;
+}
+ 
 /* ---- Hamburger toggle (mobile) ---- */
 .nav-toggle {
   display: none;
@@ -435,6 +500,53 @@ body::before {
     border-bottom: none;
   }
  
+  /* Dropdown becomes an inline accordion inside the slide panel */
+  .nav-dropdown {
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+ 
+  .nav-dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 1.15rem;
+    padding: 14px 4px;
+    opacity: 0;
+    transform: translateX(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+ 
+  .nav-menu.is-open .nav-dropdown-toggle {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.18s;
+  }
+ 
+  .nav-dropdown-menu {
+    position: static;
+    min-width: 0;
+    max-height: 0;
+    padding: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    transition: max-height 0.4s var(--ease-cinematic), padding 0.4s ease;
+  }
+ 
+  .nav-dropdown.is-open .nav-dropdown-menu {
+    max-height: 220px;
+    padding: 2px 0 12px 14px;
+  }
+ 
+  .nav-dropdown-link {
+    padding: 10px 4px;
+    font-size: 0.98rem;
+  }
+ 
   .nav-backdrop {
     display: block;
     position: fixed;
@@ -456,6 +568,7 @@ body::before {
     overflow: hidden;
   }
 }
+ 
 
 /* ==============================
    HERO HEADER
@@ -658,6 +771,7 @@ body.hero-ready .hero-content {
   to { opacity: 1; transform: translateY(0); }
 }
 
+
 /* LOGO ROW */
 .logo-row {
   display: flex;
@@ -666,7 +780,7 @@ body.hero-ready .hero-content {
   gap: clamp(12px, 4vw, 30px);
   flex-wrap: wrap;
 }
-
+ 
 .logo-row img {
   height: clamp(36px, 6vw, 55px);
   width: auto;
@@ -674,11 +788,72 @@ body.hero-ready .hero-content {
   filter: drop-shadow(0 0 8px rgba(0,255,255,0.3));
   transition: transform 0.3s ease;
 }
-
+ 
 .logo-row img:hover {
   transform: scale(1.1);
 }
-
+ 
+/* ---- Clickable org logos (hero) ---- */
+.org-logo-link {
+  position: relative;
+  display: inline-flex;
+  border-radius: 14px;
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.4s var(--ease-cinematic);
+}
+ 
+.org-logo-link::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 18px;
+  background: radial-gradient(circle, rgba(0,255,255,0.28), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+ 
+.org-logo-link img {
+  animation: logoHint 3.2s ease-in-out infinite;
+}
+ 
+@keyframes logoHint {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(0,255,255,0.3)); }
+  50% { filter: drop-shadow(0 0 16px rgba(0,255,255,0.65)); }
+}
+ 
+.org-logo-link:hover,
+.org-logo-link:focus-visible {
+  transform: translateY(-5px) scale(1.1);
+}
+ 
+.org-logo-link:hover::before,
+.org-logo-link:focus-visible::before {
+  opacity: 1;
+}
+ 
+.org-logo-link::after {
+  content: "Tap to explore";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  font-size: 0.58rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+ 
+.org-logo-link:hover::after,
+.org-logo-link:focus-visible::after {
+  opacity: 0.9;
+  transform: translateX(-50%) translateY(0);
+}
 /* PRESENTS */
 .presents {
   font-family: 'Playfair Display', serif;
