@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("APEX RUN 2026 Loaded ✅");
   document.body.classList.add("is-loading");
 
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hasHover = window.matchMedia("(hover: hover)").matches;
+
   /* =========================
      🌀 3D PRELOADER + CURTAIN REVEAL
   ========================= */
@@ -62,12 +65,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-      ✅ AMENITIES TOGGLE
+      ✅ AMENITIES TOGGLE (+ ripple)
    ========================= */
   document.querySelectorAll('.rules-toggle').forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (e) => {
       const targetId = button.getAttribute('aria-controls');
       const target = document.getElementById(targetId);
+
+      // Ripple feedback
+      const rect = button.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      button.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+
       if (!target) return;
 
       const isOpen = target.classList.contains("active");
@@ -96,8 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const targets = document.querySelectorAll(".reveal, .album-item");
     if (!targets.length) return;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     if (prefersReduced) {
       targets.forEach(el => el.classList.add("in-view"));
       return;
@@ -122,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
   (function initHeroParallax() {
     const heroBg = document.getElementById("heroBg");
     const header = document.querySelector(".site-header");
-    if (!heroBg || !header || window.matchMedia("(hover: none)").matches) return;
+    if (!heroBg || !header || !hasHover || prefersReduced) return;
 
     let rafId = null;
 
@@ -139,6 +152,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
     header.addEventListener("mouseleave", () => {
       heroBg.style.transform = "translate3d(0,0,0) scale(1)";
+    });
+  })();
+
+
+  /* =========================
+     ✨ CURSOR SPOTLIGHT
+  ========================= */
+  (function initCursorGlow() {
+    const glow = document.getElementById("cursorGlow");
+    if (!glow || !hasHover || prefersReduced) return;
+
+    let rafId = null;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let curX = targetX;
+    let curY = targetY;
+
+    document.addEventListener("mousemove", (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      glow.classList.add("is-active");
+    });
+
+    document.addEventListener("mouseleave", () => glow.classList.remove("is-active"));
+
+    function loop() {
+      curX += (targetX - curX) * 0.14;
+      curY += (targetY - curY) * 0.14;
+      glow.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
+      rafId = requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+
+  /* =========================
+     🎴 3D TILT ON CARDS
+  ========================= */
+  (function initTiltCards() {
+    if (!hasHover || prefersReduced) return;
+    const cards = document.querySelectorAll(".tilt-card");
+
+    cards.forEach(card => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        const rx = (py * -8).toFixed(2);
+        const ry = (px * 10).toFixed(2);
+        card.style.setProperty("--rx", rx + "deg");
+        card.style.setProperty("--ry", ry + "deg");
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.setProperty("--rx", "0deg");
+        card.style.setProperty("--ry", "0deg");
+      });
+    });
+  })();
+
+
+  /* =========================
+     🫧 FLOATING BUBBLES
+  ========================= */
+  (function initBubbles() {
+    if (prefersReduced) return;
+    const containers = document.querySelectorAll(".bubbles");
+    if (!containers.length) return;
+
+    containers.forEach(container => {
+      const count = window.innerWidth < 600 ? 8 : 14;
+      for (let i = 0; i < count; i++) {
+        const bubble = document.createElement("span");
+        bubble.className = "bubble";
+        const size = 10 + Math.random() * 46;
+        const left = Math.random() * 100;
+        const duration = 12 + Math.random() * 14;
+        const delay = Math.random() * -duration;
+        const drift = (Math.random() * 80 - 40).toFixed(0) + "px";
+
+        bubble.style.width = size + "px";
+        bubble.style.height = size + "px";
+        bubble.style.left = left + "%";
+        bubble.style.setProperty("--drift", drift);
+        bubble.style.animationDuration = duration + "s";
+        bubble.style.animationDelay = delay + "s";
+
+        container.appendChild(bubble);
+      }
     });
   })();
 
