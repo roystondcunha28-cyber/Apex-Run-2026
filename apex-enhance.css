@@ -1,0 +1,605 @@
+/* ==============================================================
+   APEX RUN 2026 — ENHANCEMENT LAYER
+   Load AFTER style.css. Nothing here replaces existing rules;
+   it only adds new components and a few refinements.
+============================================================== */
+
+:root {
+  --frame-line: rgba(0, 255, 255, 0.22);
+  --frame-corner: 26px;
+  --ok: #00e676;
+  --warn: #ffb703;
+  --bad: #ff5c5c;
+}
+
+/* Keyboard users get a way past the nav */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, -160%);
+  z-index: 10002;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: var(--cyan);
+  color: #000814;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: transform 0.3s var(--ease-cinematic);
+}
+
+.skip-link:focus-visible {
+  transform: translate(-50%, 0);
+}
+
+/* ==============================================================
+   1. SECTION FRAMES
+   A thin bracketed frame that draws itself as the section arrives.
+   Injected by apex-enhance.js — no HTML edits needed.
+============================================================== */
+.sec-frame {
+  position: absolute;
+  inset: clamp(14px, 2.5vw, 26px) clamp(10px, 3vw, 34px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sec-frame-edge {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, var(--frame-line), transparent);
+  transform: scaleX(0);
+  transition: transform 1.1s var(--ease-cinematic);
+}
+
+.sec-frame-edge.top,
+.sec-frame-edge.bottom {
+  left: var(--frame-corner);
+  right: var(--frame-corner);
+  height: 1px;
+}
+
+.sec-frame-edge.top { top: 0; }
+.sec-frame-edge.bottom { bottom: 0; }
+
+.sec-frame-edge.left,
+.sec-frame-edge.right {
+  top: var(--frame-corner);
+  bottom: var(--frame-corner);
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--frame-line), transparent);
+  transform: scaleY(0);
+  transition: transform 1.1s var(--ease-cinematic) 0.1s;
+}
+
+.sec-frame-edge.left { left: 0; }
+.sec-frame-edge.right { right: 0; }
+
+.sec-frame-corner {
+  position: absolute;
+  width: var(--frame-corner);
+  height: var(--frame-corner);
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.8s var(--ease-cinematic);
+}
+
+.sec-frame-corner.tl {
+  top: 0; left: 0;
+  border-top: 1px solid var(--cyan);
+  border-left: 1px solid var(--cyan);
+  border-radius: 12px 0 0 0;
+  transform: translate(-10px, -10px);
+}
+
+.sec-frame-corner.tr {
+  top: 0; right: 0;
+  border-top: 1px solid var(--gold);
+  border-right: 1px solid var(--gold);
+  border-radius: 0 12px 0 0;
+  transform: translate(10px, -10px);
+}
+
+.sec-frame-corner.bl {
+  bottom: 0; left: 0;
+  border-bottom: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  border-radius: 0 0 0 12px;
+  transform: translate(-10px, 10px);
+}
+
+.sec-frame-corner.br {
+  bottom: 0; right: 0;
+  border-bottom: 1px solid var(--cyan);
+  border-right: 1px solid var(--cyan);
+  border-radius: 0 0 12px 0;
+  transform: translate(10px, 10px);
+}
+
+.sec-frame.is-drawn .sec-frame-edge { transform: scaleX(1); }
+.sec-frame.is-drawn .sec-frame-edge.left,
+.sec-frame.is-drawn .sec-frame-edge.right { transform: scaleY(1); }
+.sec-frame.is-drawn .sec-frame-corner {
+  opacity: 0.9;
+  transform: translate(0, 0);
+}
+
+/* A single travelling glint runs the top edge once the frame lands */
+.sec-frame-spark {
+  position: absolute;
+  top: -2px;
+  left: var(--frame-corner);
+  width: 60px;
+  height: 5px;
+  border-radius: 5px;
+  background: radial-gradient(ellipse, rgba(0, 255, 255, 0.9), transparent 70%);
+  opacity: 0;
+}
+
+.sec-frame.is-drawn .sec-frame-spark {
+  animation: frameSpark 2.4s var(--ease-cinematic) 0.5s;
+}
+
+@keyframes frameSpark {
+  0% { opacity: 0; transform: translateX(0); }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(calc(100% + 60vw)); }
+}
+
+/* Keep real content above the frame */
+.has-sec-frame > *:not(.sec-frame) { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-frame-edge,
+  .sec-frame-corner { transform: none !important; opacity: 0.9; }
+  .sec-frame-spark { display: none; }
+}
+
+/* ==============================================================
+   2. HEADING WIPE
+   Replaces the plain fade on h2s. Works with the gradient
+   headings because it clips the element, not its children.
+============================================================== */
+h2.reveal[data-reveal="draw"] {
+  clip-path: inset(0 100% 0 0);
+  filter: blur(4px);
+  opacity: 1;
+  transition: clip-path 1s var(--ease-cinematic), filter 0.8s ease;
+}
+
+h2.reveal[data-reveal="draw"].in-view {
+  clip-path: inset(0 0 0 0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  h2.reveal[data-reveal="draw"] { clip-path: none; filter: none; }
+}
+
+/* ==============================================================
+   3. SCROLL PROGRESS (sits on the navbar's lower edge)
+============================================================== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  z-index: 1001;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--cyan), var(--gold), var(--dawn));
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.6);
+  pointer-events: none;
+}
+
+/* ==============================================================
+   4. TOASTS — non-blocking replacement for alert()
+============================================================== */
+.toast-stack {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 10px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.toast {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(0, 12, 26, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3px solid var(--cyan);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  pointer-events: auto;
+  animation: toastIn 0.45s var(--ease-cinematic);
+}
+
+.toast.is-leaving { animation: toastOut 0.35s ease forwards; }
+.toast[data-tone="good"] { border-left-color: var(--ok); }
+.toast[data-tone="warn"] { border-left-color: var(--warn); }
+.toast[data-tone="bad"]  { border-left-color: var(--bad); }
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.toast-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.toast-close:hover { color: white; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(10px) scale(0.97); }
+}
+
+@media (max-width: 780px) {
+  .toast-stack { bottom: 86px; }
+}
+
+/* ==============================================================
+   5. FORM: progress rail, inline validation, field states
+============================================================== */
+.form-progress {
+  margin-bottom: 26px;
+}
+
+.form-progress-bar {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.form-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--cyan), var(--gold));
+  transition: width 0.5s var(--ease-cinematic);
+}
+
+.form-progress-text {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.4px;
+  opacity: 0.65;
+}
+
+.field-msg {
+  display: block;
+  min-height: 0;
+  margin: 2px 2px 0;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.25s ease, max-height 0.25s ease;
+}
+
+.field-msg.is-shown {
+  opacity: 1;
+  max-height: 40px;
+  margin-bottom: 4px;
+}
+
+.field-msg[data-tone="bad"] { color: var(--bad); }
+.field-msg[data-tone="good"] { color: var(--ok); }
+
+.registration-card input.field-invalid {
+  border-color: rgba(255, 92, 92, 0.65);
+  box-shadow: 0 0 12px rgba(255, 92, 92, 0.18);
+}
+
+.registration-card input.field-valid {
+  border-color: rgba(0, 230, 118, 0.45);
+}
+
+.shake { animation: fieldShake 0.4s ease; }
+
+@keyframes fieldShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* The section heading you are currently filling in lights up */
+.form-group.is-active h3 {
+  color: white;
+  border-bottom-color: rgba(0, 255, 255, 0.55);
+}
+
+/* ==============================================================
+   6. EVENT CARD SPOTLIGHT (follows the pointer)
+============================================================== */
+.card-spot {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 255, 255, 0.13),
+    transparent 65%
+  );
+  z-index: 0;
+}
+
+.event-card:hover .card-spot,
+.contact-box p:hover .card-spot { opacity: 1; }
+
+.event-card > *:not(.card-spot),
+.contact-box p > * { position: relative; z-index: 1; }
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .card-spot { display: none; }
+}
+
+/* ==============================================================
+   7. MEDIA SKELETONS — gallery and highlights stop popping in blank
+============================================================== */
+.media-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(0, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 70%
+  );
+  background-size: 220% 100%;
+  animation: skeletonSweep 1.4s linear infinite;
+  transition: opacity 0.5s ease;
+}
+
+.media-ready .media-skeleton { opacity: 0; pointer-events: none; }
+
+@keyframes skeletonSweep {
+  from { background-position: 120% 0; }
+  to   { background-position: -120% 0; }
+}
+
+/* ==============================================================
+   8. LIGHTBOX: prev / next / counter / swipe
+============================================================== */
+.lb-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+}
+
+.lb-nav:hover {
+  background: rgba(0, 255, 255, 0.16);
+  border-color: var(--cyan);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.lb-prev { left: clamp(8px, 3vw, 30px); }
+.lb-next { right: clamp(8px, 3vw, 30px); }
+
+.lb-count {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  z-index: 2;
+}
+
+.lightbox-img { transition: opacity 0.2s ease; }
+.lightbox-img.is-swapping { opacity: 0; }
+
+@media (max-width: 600px) {
+  .lb-nav { width: 44px; height: 44px; font-size: 1.2rem; }
+}
+
+/* ==============================================================
+   9. BACK TO TOP — ring fills with scroll position
+============================================================== */
+.to-top {
+  position: fixed;
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 28px);
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 12, 26, 0.85);
+  backdrop-filter: blur(10px);
+  color: var(--cyan);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s var(--ease-cinematic);
+  z-index: 900;
+}
+
+.to-top.is-shown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.to-top svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.to-top circle { fill: none; stroke-width: 2; }
+.to-top .track { stroke: rgba(255, 255, 255, 0.12); }
+.to-top .bar { stroke: var(--cyan); stroke-linecap: round; transition: stroke-dashoffset 0.15s linear; }
+.to-top span { font-size: 1rem; line-height: 1; }
+
+@media (max-width: 780px) {
+  .to-top { bottom: 86px; }
+}
+
+/* ==============================================================
+   10. STICKY REGISTER BAR (mobile) — the main conversion path
+============================================================== */
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(0, 8, 20, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(0, 255, 255, 0.18);
+  transform: translateY(110%);
+  transition: transform 0.45s var(--ease-cinematic), opacity 0.3s ease;
+}
+
+.sticky-cta.is-shown { transform: translateY(0); }
+
+.sticky-cta-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.sticky-cta-info strong {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: var(--cyan);
+}
+
+.sticky-cta-info span { font-size: 0.72rem; opacity: 0.7; }
+
+.sticky-cta-btn {
+  padding: 11px 22px;
+  border-radius: 30px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 1.5px;
+  color: black;
+  background: linear-gradient(45deg, var(--gold), var(--orange));
+  white-space: nowrap;
+}
+
+@media (max-width: 780px) {
+  .sticky-cta { display: flex; }
+  body.nav-open .sticky-cta { opacity: 0; pointer-events: none; }
+}
+
+/* ==============================================================
+   11. EVENT STATUS PILL (countdown / finished)
+============================================================== */
+.event-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 7px 18px;
+  border-radius: 30px;
+  font-size: clamp(0.72rem, 1.9vw, 0.84rem);
+  letter-spacing: 0.6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.event-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+  animation: statusBlink 2s ease-in-out infinite;
+}
+
+.event-status[data-state="past"] .event-status-dot {
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+  animation: none;
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.countdown-units {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.countdown-units b {
+  font-weight: 400;
+  color: var(--gold);
+}
+
+/* ==============================================================
+   12. SMALL REFINEMENTS
+============================================================== */
+
+/* The gallery cards were anchors pointing at "#", which jumped the
+   page to the top on tap. JS now blocks that; this keeps the cursor
+   honest about what they do. */
+.album-item { cursor: zoom-in; }
+
+/* Amenities panels can grow past 400px on narrow phones */
+.event-rules.active { max-height: 600px; }
+
+/* Nav panel needs a floor under the sticky bar on short screens */
+@media (max-width: 780px) {
+  .nav-menu { padding-bottom: 100px; }
+}
