@@ -43,22 +43,23 @@
 
 <nav class="navbar">
     <div class="logo">
-        <img src="apex-run-logo.PNG" class="college-logo-small" alt="Apex RUN LOGO">
+        <img src="apex-run-logo.PNG" class="college-logo-small" alt="Apex Run logo">
         <span>APEX RUN 2026</span>
     </div>
- 
+
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
         <span class="bar bar-1"></span>
         <span class="bar bar-2"></span>
         <span class="bar bar-3"></span>
     </button>
- 
+
     <div class="nav-menu" id="navMenu">
         <a href="#about" class="nav-link">About</a>
+        <a href="#highlights" class="nav-link">Highlights</a>
         <a href="#events" class="nav-link">Events</a>
- 
-        <div class="nav-dropdown">
-            <button type="button" class="nav-link nav-dropdown-toggle" id="orgToggle" aria-haspopup="true" aria-expanded="false">
+
+        <div class="nav-dropdown" id="orgDropdown">
+            <button type="button" class="nav-link nav-dropdown-toggle" id="orgToggle" aria-haspopup="true" aria-expanded="false" aria-controls="orgMenu">
                 Organizers <span class="caret" aria-hidden="true">▾</span>
             </button>
             <div class="nav-dropdown-menu" id="orgMenu">
@@ -67,18 +68,18 @@
                 <a href="about-runners-club.html" class="nav-dropdown-link">Mangalore Runners Club</a>
             </div>
         </div>
- 
+
         <a href="#registration" class="nav-link">Register</a>
         <a href="#venue" class="nav-link">Venue</a>
         <a href="#contact" class="nav-link">Contact</a>
         <a href="https://www.instagram.com/milagres_college_mangalore?igsh=MTdkYzVmZjFlcm80NQ==" class="nav-link nav-follow">
-            <img src="instagram-logo.png" class="instagram-icon"> Follow Us
+            <img src="instagram-logo.png" class="instagram-icon" alt=""> Follow Us
         </a>
     </div>
- 
+
     <div class="nav-backdrop" id="navBackdrop"></div>
 </nav>
- 
+
 <header class="site-header">
 
     <!-- CINEMATIC RUNNING BACKGROUND -->
@@ -129,7 +130,7 @@
             <div class="hero-meta-divider" aria-hidden="true"></div>
             <div class="hero-meta-item">
                 <svg viewBox="0 0 24 24" class="hero-meta-icon"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-                <span>5:00 AM </span>
+                <span>5:00 AM</span>
             </div>
             <div class="hero-meta-divider" aria-hidden="true"></div>
             <div class="hero-meta-item">
@@ -158,13 +159,15 @@
         <p>Apex Run 2026 is a national level vibrant community marathon hosted by Milagres College, Mangaluru, in association with ICYM Mangalore and Mangalore Runners Club. Scheduled for 10th May 2026, the event brings together over 2500 participants including students, athletes, and fitness enthusiasts to promote health, endurance, and unity. With multiple race categories designed for all fitness levels, Apex Run aims to inspire an active lifestyle while strengthening community spirit and sports culture in the region.</p>
     </div>
 </section>
+
+<!-- EVENT GALLERY -->
 <section class="album-section" style="padding-top: 30px;">
   <h2 class="gradient-heading reveal" data-reveal="draw">EVENT GALLERY</h2>
 
   <div class="album-scroll">
 
     <!-- ITEM 1 -->
-   <div class="album-item">
+    <div class="album-item">
       <img src="img3.jpeg" alt="Event Image">
     </div>
 
@@ -177,21 +180,70 @@
     <a href="#" class="album-item">
       <img src="img2.jpeg" alt="Event Image">
     </a>
-      
+
     <!-- ITEM 4 -->
     <a href="#" class="album-item">
       <img src="img4.jpeg" alt="Event Image">
     </a>
-      
+
     <!-- ADD MORE -->
-    
+
   </div>
 </section>
+
+<!-- ============================
+     EVENT HIGHLIGHTS (auto-scrolling images + video clips)
+============================ -->
+<section id="highlights" class="highlights-section">
+  <h2 class="gradient-heading reveal" data-reveal="draw">EVENT HIGHLIGHTS</h2>
+  <p class="highlights-sub reveal" data-reveal="rise">Moments from the road — Apex Run in motion.</p>
+
+  <div class="highlights-marquee" id="highlightsMarquee">
+    <div class="highlights-track" id="highlightsTrack">
+
+      <figure class="highlight-item">
+        <img src="highlight1.jpeg" alt="Runners gathering at the start line" loading="lazy">
+        <figcaption>Flag off at dawn</figcaption>
+      </figure>
+
+      <figure class="highlight-item is-video">
+        <video src="highlight-clip1.mp4" poster="highlight-clip1.jpg" muted loop playsinline preload="metadata"></video>
+        <span class="highlight-badge" aria-hidden="true">▶</span>
+        <figcaption>The 10K pack on Sturrock Road</figcaption>
+      </figure>
+
+      <figure class="highlight-item">
+        <img src="highlight2.jpeg" alt="Supporters cheering along the route" loading="lazy">
+        <figcaption>Cheer squad at Jeppu</figcaption>
+      </figure>
+
+      <figure class="highlight-item is-video">
+        <video src="highlight-clip2.mp4" poster="highlight-clip2.jpg" muted loop playsinline preload="metadata"></video>
+        <span class="highlight-badge" aria-hidden="true">▶</span>
+        <figcaption>Finish line rush</figcaption>
+      </figure>
+
+      <figure class="highlight-item">
+        <img src="highlight3.jpeg" alt="Winners receiving medals" loading="lazy">
+        <figcaption>Podium moments</figcaption>
+      </figure>
+
+      <figure class="highlight-item">
+        <img src="highlight4.jpeg" alt="Volunteers at the hydration point" loading="lazy">
+        <figcaption>Hydration point, kilometre six</figcaption>
+      </figure>
+
+      <!-- ADD MORE HIGHLIGHT ITEMS HERE -->
+
+    </div>
+  </div>
+</section>
+
 <!-- GENERAL RULES -->
 <section class="rules-section reveal" data-reveal="rise">
    <h2 class="gradient-text">GUIDELINES</h2>
     <ol>
-     <li>The event includes <strong>10 KM and 5 KM competitive runs</strong>, and a <strong>3 KM fun run</strong>.</li>
+  <li>The event includes <strong>10 KM and 5 KM competitive runs</strong>, and a <strong>3 KM fun run</strong>.</li>
 
   <li>All participants must register in advance and wear their <strong>bib number visibly</strong> during the race.</li>
 
@@ -218,17 +270,18 @@
   <li>The organizer’s decision will be final in all matters.</li>
     </ol>
 </section>
+
 <!-- EVENTS -->
 <section id="events" class="event-section">
     <div class="bubbles" aria-hidden="true" data-bubble-theme="gold"></div>
     <h2 class="reveal" data-reveal="draw">Events</h2>
     <div class="event-grid">
 
-      <!-- 3K RUN --->
+      <!-- 3K RUN -->
         <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
             <span class="info-frame-corner tl" aria-hidden="true"></span>
             <span class="info-frame-corner br" aria-hidden="true"></span>
-            <img src="reels-logo.webp" alt="3k RUN" class="event-logo">
+            <img src="reels-logo.webp" alt="3K Run" class="event-logo">
             <h3>The 3K Run</h3>
             <p>Short Distance, Big Accomplishment</p>
             <p>₹250</p>
@@ -236,19 +289,19 @@
            <div id="3k-rules" class="event-rules">
                 <ul>
                     <li><strong>E-Certificate</strong>.</li>
-                   <li><strong>BIB Number</strong>.</li>
+                    <li><strong>BIB Number</strong>.</li>
                     <li><strong>Medal</strong>.</li>
                     <li><strong>T-Shirt</strong>.</li>
-                     <li><strong>Refreshments</strong>.</li>
+                    <li><strong>Refreshments</strong>.</li>
                 </ul>
             </div>
-        </div> 
+        </div>
 
-        <!-- 5K RUN --->
+        <!-- 5K RUN -->
         <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
             <span class="info-frame-corner tl" aria-hidden="true"></span>
             <span class="info-frame-corner br" aria-hidden="true"></span>
-            <img src="five-logo.webp" alt="5k RUN" class="event-logo">
+            <img src="five-logo.webp" alt="5K Run" class="event-logo">
             <h3>The 5K Run</h3>
             <p>Forward is forward, No Matter How Slow You GO</p>
             <p>₹350</p>
@@ -256,10 +309,10 @@
            <div id="5k-rules" class="event-rules">
                 <ul>
                     <li><strong>E-Certificate</strong>.</li>
-                   <li><strong>BIB Number</strong>.</li>
+                    <li><strong>BIB Number</strong>.</li>
                     <li><strong>Medal</strong>.</li>
                     <li><strong>T-Shirt</strong>.</li>
-                     <li><strong>Refreshments</strong>.</li>
+                    <li><strong>Refreshments</strong>.</li>
                 </ul>
             </div>
         </div>
@@ -268,29 +321,30 @@
         <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
             <span class="info-frame-corner tl" aria-hidden="true"></span>
             <span class="info-frame-corner br" aria-hidden="true"></span>
-            <img src="ten-logo.webp" alt="10K RUN" class="event-logo">
+            <img src="ten-logo.webp" alt="10K Run" class="event-logo">
             <h3>The 10K Run</h3>
-            <p>Push Your Limits & Break Them</p>
+            <p>Push Your Limits &amp; Break Them</p>
             <p>₹450</p>
            <button class="rules-toggle" aria-controls="10k-rules" aria-expanded="false">Amenities</button>
            <div id="10k-rules" class="event-rules">
                 <ul>
                     <li><strong>E-Certificate</strong>.</li>
-                   <li><strong>BIB Number</strong>.</li>
+                    <li><strong>BIB Number</strong>.</li>
                     <li><strong>Medal</strong>.</li>
                     <li><strong>T-Shirt</strong>.</li>
-                     <li><strong>Refreshments</strong>.</li>
+                    <li><strong>Refreshments</strong>.</li>
                 </ul>
             </div>
         </div>
 
     </div>
 </section>
+
 <h2 class="gradient-heading reveal" data-reveal="draw">REGISTER HERE</h2>
 
 <section id="registration" class="registration-section">
   <form id="registrationForm" class="registration-card reveal" data-reveal="rise">
-    
+
 <!-- PERSONAL DETAILS -->
 <div class="form-group">
   <h3>Personal Details</h3>
@@ -352,10 +406,10 @@
 
   <p id="sizeSuggestion" class="size-note"></p>
 </div>
-    
+
 <!-- PAYMENT QR -->
 <div class="qr-section">
-  <h3>Scan & Pay</h3>
+  <h3>Scan &amp; Pay</h3>
 <img id="qrImage" class="qr-image" style="display:none;" alt="Payment QR">
 <p id="qrLabel" class="qr-note">Select a run to view payment QR</p>
 </div>
@@ -376,31 +430,29 @@
   </div>
 </section>
 
-<!-- VENUE -->
+<!-- ROUTE MAP -->
 <section class="roadmap-section">
   <h2 class="gradient-heading reveal" data-reveal="draw">ROUTE MAP</h2>
 
   <a href="https://maps.app.goo.gl/qbdopUji7XgzrV9k6" class="roadmap-card reveal" data-reveal="scale">
     <img src="roadmap.PNG" alt="Apex Run Route Map">
-    
+
     <div class="roadmap-overlay">
       <span>View Full Route</span>
     </div>
   </a>
 </section>
-    <section id="venue" class="venue-section">
-     <h2 class="gradient-heading reveal" data-reveal="draw">
-   EVENT LOCATION
-</h2>
+
+<!-- VENUE -->
+<section id="venue" class="venue-section">
+    <h2 class="gradient-heading reveal" data-reveal="draw">EVENT LOCATION</h2>
     <p>Milagres College - Athena Hospital - Unity Hospital - Father Muller Hospital - Jeppu - Koti Chennaya Circle - KMC Hospital - Casa Grande - Sturrock Road - Avery Junction - Milagres College</p>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.710827347024!2d74.79934407587027!3d12.87486219087878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a4c66670121%3A0x8795747a583dd784!2sMilagres%20College!5e0!3m2!1sen!2sin!4v1697400000000!5m2!1sen!2sin" width="100%" height="400" style="border-radius:15px;" loading="lazy" class="reveal" data-reveal="scale"></iframe>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.710827347024!2d74.79934407587027!3d12.87486219087878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a4c66670121%3A0x8795747a583dd784!2sMilagres%20College!5e0!3m2!1sen!2sin!4v1697400000000!5m2!1sen!2sin" width="100%" height="400" style="border-radius:15px;" loading="lazy" class="reveal" data-reveal="scale" title="Milagres College location map"></iframe>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-    <h2 class="gradient-heading reveal" data-reveal="draw">
-   FOR MORE DETAILS CONTACT
-</h2>
+    <h2 class="gradient-heading reveal" data-reveal="draw">FOR MORE DETAILS CONTACT</h2>
     <div class="contact-box">
         <p class="reveal tilt-card" data-reveal="cascade"><strong>Mr. Clyde Dsouza</strong><br>Event Co-ordinator<br>+91 99015 60321</p>
         <p class="reveal tilt-card" data-reveal="cascade"><strong>Floyd Pinto</strong><br>Student Co-ordinator<br>+91 78995 88873</p>
@@ -410,17 +462,21 @@
 
 <!-- FOOTER -->
 <footer>
-    <p>Web Developed by Royston Jhowin Dcunha</p>   <a href="https://www.instagram.com/idlisandframes?igsh=Nm1jdm92OXdvZjFi&utm_source=qr">
-        <img src="instagram-logo.png" class="instagram-icon"> Follow @idlisnframes
+    <p>Web Developed by Royston Jhowin Dcunha</p>
+    <a href="https://www.instagram.com/idlisandframes?igsh=Nm1jdm92OXdvZjFi&utm_source=qr">
+        <img src="instagram-logo.png" class="instagram-icon" alt=""> Follow @idlisnframes
     </a>
     <p>Hampankatta, Mangaluru – 575001</p>
     <p>© APEXRUN’26</p>
 </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
-    <script src="script.js"></script>
-    <div id="lightbox" class="lightbox">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
+<script src="script.js"></script>
+
+<div id="lightbox" class="lightbox">
   <span class="close-btn">&times;</span>
-  <img class="lightbox-img" src="">
+  <img class="lightbox-img" src="" alt="">
 </div>
+
 </body>
 </html>
