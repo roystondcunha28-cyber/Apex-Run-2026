@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(tick);
   })();
 
+
   /* =========================
      🍔 NAV MENU (mobile toggle + scroll-spy)
   ========================= */
@@ -71,42 +72,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const menu = document.getElementById("navMenu");
     const backdrop = document.getElementById("navBackdrop");
     if (!toggle || !menu) return;
- 
+
     function openMenu() {
       menu.classList.add("is-open");
       backdrop?.classList.add("is-open");
       toggle.setAttribute("aria-expanded", "true");
       document.body.classList.add("nav-open");
     }
- 
+
     function closeMenu() {
       menu.classList.remove("is-open");
       backdrop?.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
       document.body.classList.remove("nav-open");
     }
- 
+
     toggle.addEventListener("click", () => {
       const isOpen = menu.classList.contains("is-open");
       isOpen ? closeMenu() : openMenu();
     });
- 
+
     backdrop?.addEventListener("click", closeMenu);
- 
-    menu.querySelectorAll(".nav-link").forEach(link => {
+
+    // IMPORTANT: the Organizers button also carries .nav-link.
+    // It must NOT close the panel, or the dropdown can never open on mobile.
+    menu.querySelectorAll(".nav-link:not(.nav-dropdown-toggle)").forEach(link => {
       link.addEventListener("click", closeMenu);
     });
- 
+
+    // Choosing an organizer page does close the panel.
+    menu.querySelectorAll(".nav-dropdown-link").forEach(link => {
+      link.addEventListener("click", closeMenu);
+    });
+
     document.addEventListener("keydown", e => {
       if (e.key === "Escape") closeMenu();
     });
- 
+
     // Scroll-spy: highlight the nav link for the section in view
     const navLinks = Array.from(menu.querySelectorAll('.nav-link[href^="#"]'));
     const sections = navLinks
       .map(link => document.querySelector(link.getAttribute("href")))
       .filter(Boolean);
- 
+
     if (sections.length && "IntersectionObserver" in window) {
       const spy = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -118,11 +126,58 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       }, { threshold: 0.4, rootMargin: "-30% 0px -50% 0px" });
- 
+
       sections.forEach(section => spy.observe(section));
     }
   })();
- 
+
+
+  /* =========================
+     🔽 ORGANIZERS DROPDOWN
+     (click to toggle everywhere, hover on desktop)
+  ========================= */
+  (function initOrgDropdown() {
+    const dropdown = document.getElementById("orgDropdown") || document.querySelector(".nav-dropdown");
+    const toggle = document.getElementById("orgToggle");
+    const dropMenu = document.getElementById("orgMenu");
+    if (!dropdown || !toggle) return;
+
+    const openDrop = () => {
+      dropdown.classList.add("is-open");
+      toggle.setAttribute("aria-expanded", "true");
+    };
+
+    const closeDrop = () => {
+      dropdown.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+
+    toggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropdown.classList.contains("is-open") ? closeDrop() : openDrop();
+    });
+
+    // Desktop convenience: open on hover, close on leave
+    if (hasHover && window.innerWidth > 780) {
+      dropdown.addEventListener("mouseenter", openDrop);
+      dropdown.addEventListener("mouseleave", closeDrop);
+    }
+
+    // Click anywhere outside closes it
+    document.addEventListener("click", (e) => {
+      if (!dropdown.contains(e.target)) closeDrop();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeDrop();
+    });
+
+    dropMenu?.querySelectorAll(".nav-dropdown-link").forEach(link => {
+      link.addEventListener("click", closeDrop);
+    });
+  })();
+
 
   /* =========================
       ✅ AMENITIES TOGGLE (+ ripple)
@@ -223,7 +278,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const glow = document.getElementById("cursorGlow");
     if (!glow || !hasHover || prefersReduced) return;
 
-    let rafId = null;
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight / 2;
     let curX = targetX;
@@ -241,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
       curX += (targetX - curX) * 0.14;
       curY += (targetY - curY) * 0.14;
       glow.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
-      rafId = requestAnimationFrame(loop);
+      requestAnimationFrame(loop);
     }
     loop();
   })();
@@ -337,10 +391,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     🖼️ ALBUM AUTO-SCROLL
+     🖼️ ALBUM AUTO-SCROLL (Event Gallery)
   ========================= */
   const album = document.querySelector(".album-scroll");
-  let autoScrollTimer = null;
   let isPaused = false;
 
   if (album) {
@@ -352,7 +405,7 @@ document.addEventListener("DOMContentLoaded", () => {
       album.scrollTo({ left: next, behavior: "smooth" });
     }
 
-    autoScrollTimer = setInterval(doAutoScroll, 3200);
+    setInterval(doAutoScroll, 3200);
 
     // Pause on touch/mouse interaction
     album.addEventListener("pointerdown", () => { isPaused = true; });
@@ -364,19 +417,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     📸 LIGHTBOX
+     🎞️ EVENT HIGHLIGHTS MARQUEE
+     Continuous loop of photos + short clips.
+  ========================= */
+  (function initHighlights() {
+    const marquee = document.getElementById("highlightsMarquee");
+    const track = document.getElementById("highlightsTrack");
+    if (!marquee || !track) return;
+
+    if (!prefersReduced) {
+      // Duplicate the set once so translateX(-50%) loops seamlessly
+      track.innerHTML += track.innerHTML;
+
+      // Duplicated items are decorative — hide them from screen readers
+      const all = Array.from(track.children);
+      all.slice(all.length / 2).forEach(el => el.setAttribute("aria-hidden", "true"));
+
+      // Scroll speed scales with item count, so adding items doesn't speed it up
+      const itemCount = all.length / 2;
+      track.style.setProperty("--marquee-duration", (itemCount * 7) + "s");
+    }
+
+    // Pause while the visitor is touching or dragging
+    marquee.addEventListener("pointerdown", () => marquee.classList.add("is-paused"));
+    marquee.addEventListener("pointerup", () => {
+      clearTimeout(marquee._resume);
+      marquee._resume = setTimeout(() => marquee.classList.remove("is-paused"), 3500);
+    });
+
+    // Play clips only while they are on screen
+    const videos = track.querySelectorAll("video");
+    if (videos.length && "IntersectionObserver" in window) {
+      const vObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const v = entry.target;
+          if (entry.isIntersecting) {
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.35 });
+
+      videos.forEach(v => vObserver.observe(v));
+    }
+  })();
+
+
+  /* =========================
+     📸 LIGHTBOX (delegated — covers cloned highlight items too)
   ========================= */
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = lightbox?.querySelector(".lightbox-img");
   const closeBtn = lightbox?.querySelector(".close-btn");
 
-  document.querySelectorAll(".album-item img").forEach(img => {
-    img.addEventListener("click", () => {
-      if (!lightbox || !lightboxImg) return;
-      lightboxImg.src = img.src;
-      lightbox.classList.add("active");
-      document.body.style.overflow = "hidden";
-    });
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest?.(".album-item img, .highlight-item img");
+    if (!img || !lightbox || !lightboxImg) return;
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || "";
+    lightbox.classList.add("active");
+    document.body.style.overflow = "hidden";
   });
 
   function closeLightbox() {
@@ -424,25 +525,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
      💳 DYNAMIC QR + UTR
-     (logic unchanged, UI improved)
   ========================= */
   const qrImage = document.getElementById("qrImage");
   const qrLabel = document.getElementById("qrLabel");
   const utrGroup = document.getElementById("utrGroup");
 
   const qrMap = {
-    "3K":  { src: "qr-3k.jpeg",  text: "Scan & pay ₹250 for 3K Run" },
-    "5K":  { src: "qr-5k.jpeg",  text: "Scan & pay ₹350 for 5K Run" },
-    "10K": { src: "qr-10k.jpeg", text: "Scan & pay ₹450 for 10K Run" }
+    "3K":  { src: "qr-3k.jpeg",  text: "Scan &amp; pay ₹250 for 3K Run" },
+    "5K":  { src: "qr-5k.jpeg",  text: "Scan &amp; pay ₹350 for 5K Run" },
+    "10K": { src: "qr-10k.jpeg", text: "Scan &amp; pay ₹450 for 10K Run" }
   };
 
   document.querySelectorAll('input[name="run"]').forEach(radio => {
     radio.addEventListener("change", () => {
       const selected = radio.value;
-      if (!qrMap[selected]) return;
+      if (!qrMap[selected] || !qrImage) return;
 
-      // Fade out → swap → fade in (no lag)
-      if (qrImage.style.display === "block") {
+      const wasVisible = qrImage.style.display === "block";
+
+      // Fade out → swap → fade in
+      if (wasVisible) {
         qrImage.style.opacity = "0";
         qrImage.style.transform = "scale(0.92)";
       }
@@ -450,7 +552,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         qrImage.src = qrMap[selected].src;
         qrImage.style.display = "block";
-        qrLabel.innerHTML = qrMap[selected].text;
+        if (qrLabel) qrLabel.innerHTML = qrMap[selected].text;
 
         // Force reflow before animation
         qrImage.getBoundingClientRect();
@@ -460,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
         qrImage.style.transform = "scale(1)";
 
         if (utrGroup) utrGroup.style.display = "block";
-      }, qrImage.style.display === "block" ? 180 : 0);
+      }, wasVisible ? 180 : 0);
     });
   });
 
@@ -485,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const utr = formData.get("utr");
       if (!utr || !/^[A-Za-z0-9]{10,20}$/.test(utr)) {
-        alert("⚠️ Please enter a valid UTR / Transaction ID (12 characters)");
+        alert("⚠️ Please enter a valid UTR / Transaction ID");
         return;
       }
 
