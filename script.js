@@ -1,11 +1,65 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   console.log("APEX RUN 2026 Loaded ✅");
+  document.body.classList.add("is-loading");
 
   /* =========================
-     🔘 REGISTRATION TOGGLE
-     --registration-toggle-btn: 0 = open, 1 = closed
+     🌀 3D PRELOADER + CURTAIN REVEAL
   ========================= */
+  (function initPreloader() {
+    const preloader = document.getElementById("preloader");
+    const fill = document.getElementById("loaderFill");
+    const pct = document.getElementById("loaderPercent");
+    const curtainLeft = document.querySelector(".curtain-left");
+    const curtainRight = document.querySelector(".curtain-right");
+
+    if (!preloader) {
+      document.body.classList.remove("is-loading");
+      document.body.classList.add("hero-ready");
+      return;
+    }
+
+    let progress = 0;
+    const minDuration = 1200; // ms, feels intentional rather than instant
+    const start = Date.now();
+
+    function tick() {
+      const elapsed = Date.now() - start;
+      const target = Math.min(100, Math.floor((elapsed / minDuration) * 100));
+      // Ease progress toward target so it never feels linear/robotic
+      progress += (target - progress) * 0.25 + 0.6;
+      progress = Math.min(progress, 100);
+
+      if (fill) fill.style.width = progress + "%";
+      if (pct) pct.textContent = Math.floor(progress) + "%";
+
+      const pageReady = document.readyState === "complete";
+
+      if (progress >= 100 && (pageReady || elapsed > 4000)) {
+        finishLoading();
+      } else {
+        requestAnimationFrame(tick);
+      }
+    }
+
+    function finishLoading() {
+      preloader.classList.add("is-hidden");
+      if (curtainLeft) curtainLeft.classList.add("is-open");
+      if (curtainRight) curtainRight.classList.add("is-open");
+
+      document.body.classList.remove("is-loading");
+      document.body.classList.add("hero-ready");
+
+      setTimeout(() => {
+        preloader.remove();
+        curtainLeft?.remove();
+        curtainRight?.remove();
+      }, 1000);
+    }
+
+    requestAnimationFrame(tick);
+  })();
+
 
   /* =========================
       ✅ AMENITIES TOGGLE
@@ -36,37 +90,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     ⏳ COUNTDOWN (card-style)
+     🎬 SCROLL REVEAL SYSTEM
   ========================= */
-  const targetDate = new Date("May 10, 2026 05:00:00").getTime();
-  const countdownEl = document.getElementById("countdown");
+  (function initScrollReveal() {
+    const targets = document.querySelectorAll(".reveal, .album-item");
+    if (!targets.length) return;
 
-  function renderCountdown() {
-    const now = Date.now();
-    const diff = targetDate - now;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!countdownEl) return;
-
-    if (diff <= 0) {
-      countdownEl.innerHTML = `<span style="font-size:1.6rem;font-weight:800;color:#00ffff;text-shadow:0 0 20px #00ffff">🚀 Race Day!</span>`;
+    if (prefersReduced) {
+      targets.forEach(el => el.classList.add("in-view"));
       return;
     }
 
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
 
-    countdownEl.innerHTML = `
-      <div class="countdown-unit"><span class="countdown-num">${String(d).padStart(2,'0')}</span><span class="countdown-label">Days</span></div>
-      <div class="countdown-unit"><span class="countdown-num">${String(h).padStart(2,'0')}</span><span class="countdown-label">Hours</span></div>
-      <div class="countdown-unit"><span class="countdown-num">${String(m).padStart(2,'0')}</span><span class="countdown-label">Mins</span></div>
-      <div class="countdown-unit"><span class="countdown-num">${String(s).padStart(2,'0')}</span><span class="countdown-label">Secs</span></div>
-    `;
-  }
+    targets.forEach(el => observer.observe(el));
+  })();
 
-  renderCountdown();
-  setInterval(renderCountdown, 1000);
+
+  /* =========================
+     🖱️ HERO PARALLAX (desktop only)
+  ========================= */
+  (function initHeroParallax() {
+    const heroBg = document.getElementById("heroBg");
+    const header = document.querySelector(".site-header");
+    if (!heroBg || !header || window.matchMedia("(hover: none)").matches) return;
+
+    let rafId = null;
+
+    header.addEventListener("mousemove", (e) => {
+      const rect = header.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        heroBg.style.transform = `translate3d(${x * -14}px, ${y * -10}px, 0) scale(1.03)`;
+      });
+    });
+
+    header.addEventListener("mouseleave", () => {
+      heroBg.style.transform = "translate3d(0,0,0) scale(1)";
+    });
+  })();
 
 
   /* =========================
@@ -284,6 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* =========================
    🔥 THREE.JS HERO VFX
+   (dust / ember particles drifting through the dawn sky)
 ========================= */
 (function initHeroVFX() {
   const canvas = document.getElementById("heroCanvas");
@@ -299,25 +374,37 @@ document.addEventListener("DOMContentLoaded", () => {
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
-  // Particles
-  const count = 1000;
+  // Particles — two layers: cool cyan mist + warm gold embers
+  const count = 900;
   const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * (i % 3 === 2 ? 10 : i % 3 === 1 ? 8 : 15);
+  const colors = new Float32Array(count * 3);
+  const cyanColor = new THREE.Color(0x00ffff);
+  const goldColor = new THREE.Color(0xffb703);
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    positions[i3]     = (Math.random() - 0.5) * 15;
+    positions[i3 + 1] = (Math.random() - 0.5) * 8;
+    positions[i3 + 2] = (Math.random() - 0.5) * 10;
+
+    const c = Math.random() > 0.7 ? goldColor : cyanColor;
+    colors[i3] = c.r; colors[i3 + 1] = c.g; colors[i3 + 2] = c.b;
   }
 
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
-  const mat = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.03, transparent: true, opacity: 0.7 });
+  const mat = new THREE.PointsMaterial({ size: 0.035, transparent: true, opacity: 0.75, vertexColors: true });
   const points = new THREE.Points(geo, mat);
   scene.add(points);
 
   let raf;
   function animate() {
     raf = requestAnimationFrame(animate);
-    points.rotation.y += 0.0007;
-    points.rotation.x += 0.0003;
+    points.rotation.y += 0.0006;
+    points.rotation.x += 0.0002;
+    points.position.y = Math.sin(Date.now() * 0.00015) * 0.15;
     renderer.render(scene, camera);
   }
   animate();
