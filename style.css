@@ -2671,3 +2671,63 @@ input:focus-visible,
   opacity: 0.88;
   font-size: clamp(0.88rem, 2vw, 1rem);
 }
+/* ==============================================================
+   PERFORMANCE OVERRIDES
+============================================================== */
+
+/* 1. Stop full-screen background-position repaints */
+body::before { animation: none; }
+.hero-sky { animation: none; background-position: 0% 15%; }
+
+/* 2. Release GPU layers once the reveal has played */
+.reveal.in-view { will-change: auto; }
+
+/* 3. Animated filters are the most expensive kind — drop them */
+.org-logo-link img { animation: none; filter: drop-shadow(0 0 10px rgba(0,255,255,0.4)); }
+
+/* 4. Blend modes on moving elements repaint everything beneath */
+.cursor-glow { mix-blend-mode: normal; }
+
+/* 5. Let the browser skip offscreen sections entirely */
+.album-section,
+.highlights-section,
+.rules-section,
+.event-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+
+/* 6. Marquee gets its own layer instead of repainting */
+.highlights-track { will-change: transform; }
+.highlight-item { contain: paint; }
+
+/* 7. Mobile: strip the expensive glass and blur work */
+@media (max-width: 900px) {
+  .navbar,
+  .hero-info-bubble,
+  .registration-card,
+  .registration-closed,
+  .info-frame,
+  .contact-box p,
+  .org-hero-logo,
+  .nav-backdrop,
+  .nav-menu {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .navbar { background: rgba(0,8,20,0.96); }
+  .registration-card,
+  .registration-closed,
+  .info-frame { background: rgba(9,20,38,0.92); }
+  .hero-info-bubble { background: rgba(9,20,38,0.85); }
+  .contact-box p { background: rgba(255,255,255,0.08); }
+
+  body::before { display: none; }
+  .hero-grain { display: none; }
+  .logo-neon::before,
+  .logo-neon::after { display: none; }
+  .hero-orbits { display: none; }
+  .gradient-heading,
+  .gradient-text { animation: none; }
+}
