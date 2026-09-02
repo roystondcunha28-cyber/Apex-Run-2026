@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     🫧 FLOATING BUBBLES
+     🫧 FLOATING BUBBLES (About / Events sections)
   ========================= */
   (function initBubbles() {
     if (prefersReduced) return;
@@ -242,6 +242,37 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(bubble);
       }
     });
+  })();
+
+
+  /* =========================
+     ✨ HERO LIGHT EMBERS
+  ========================= */
+  (function initEmbers() {
+    if (prefersReduced) return;
+    const container = document.getElementById("heroEmbers");
+    if (!container) return;
+
+    const count = window.innerWidth < 600 ? 14 : 26;
+    for (let i = 0; i < count; i++) {
+      const ember = document.createElement("span");
+      const isGold = Math.random() > 0.65;
+      ember.className = "ember" + (isGold ? " gold" : "");
+      const size = 2 + Math.random() * 4;
+      const left = Math.random() * 100;
+      const duration = 9 + Math.random() * 10;
+      const delay = Math.random() * -duration;
+      const drift = (Math.random() * 60 - 30).toFixed(0) + "px";
+
+      ember.style.width = size + "px";
+      ember.style.height = size + "px";
+      ember.style.left = left + "%";
+      ember.style.setProperty("--drift", drift);
+      ember.style.animationDuration = duration + "s";
+      ember.style.animationDelay = delay + "s";
+
+      container.appendChild(ember);
+    }
   })();
 
 
