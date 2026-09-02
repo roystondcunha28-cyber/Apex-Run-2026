@@ -39,6 +39,8 @@
 <div class="curtain curtain-left" aria-hidden="true"></div>
 <div class="curtain curtain-right" aria-hidden="true"></div>
 
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
 <nav class="navbar">
     <div class="logo">
     <img src="apex-run-logo.PNG" class="college-logo-small" alt="Apex RUN LOGO">
@@ -114,6 +116,7 @@
         </div>
 
         <div class="hero-vignette"></div>
+        <div class="hero-grain" aria-hidden="true"></div>
     </div>
 
     <div class="hero-content">
@@ -129,13 +132,33 @@
             <img src="Apex-run.PNG" class="apex-run-logo" alt="Apex Run 2026">
         </div>
 
-        <div class="hero-details">
-            10th May 2026 &nbsp;·&nbsp; 5:00 AM &nbsp;·&nbsp; Milagres College, Mangalore
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <svg viewBox="0 0 24 24" class="hero-meta-icon"><path d="M7 3v3M17 3v3M3.5 9h17M5 6h14a1.5 1.5 0 0 1 1.5 1.5V19A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V7.5A1.5 1.5 0 0 1 5 6Z"/></svg>
+                <span>10 May 2026</span>
+            </div>
+            <div class="hero-meta-item">
+                <svg viewBox="0 0 24 24" class="hero-meta-icon"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+                <span>5:00 AM Flag-off</span>
+            </div>
+            <div class="hero-meta-item">
+                <svg viewBox="0 0 24 24" class="hero-meta-icon"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
+                <span>Milagres College, Mangaluru</span>
+            </div>
         </div>
 
         <a href="#registration" class="hero-cta">
             <span>Join The Run</span>
+            <svg viewBox="0 0 24 24" class="hero-cta-arrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
+
+        <div class="hero-stat-row">
+            <div class="hero-stat"><strong>2500+</strong><span>Runners</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><strong>3</strong><span>Categories</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><strong>1848</strong><span>College founded</span></div>
+        </div>
     </div>
 
     <div class="scroll-cue" aria-hidden="true">
@@ -146,6 +169,7 @@
 
 <!-- ABOUT -->
 <section id="about" class="about-section" style="padding-bottom: 30px;">
+    <div class="bubbles" aria-hidden="true" data-bubble-theme="cyan"></div>
     <h2 class="reveal" data-reveal="draw">APEX RUN 2026</h2>
     <p class="reveal" data-reveal="rise">Apex Run 2026 is a national level vibrant community marathon hosted by Milagres College, Mangaluru, in association with ICYM Mangalore and Mangalore Runners Club. Scheduled for 10th May 2026, the event brings together over 2500 participants including students, athletes, and fitness enthusiasts to promote health, endurance, and unity. With multiple race categories designed for all fitness levels, Apex Run aims to inspire an active lifestyle while strengthening community spirit and sports culture in the region.
     </p>
@@ -220,11 +244,12 @@
 </section>
 <!-- EVENTS -->
 <section id="events" class="event-section">
+    <div class="bubbles" aria-hidden="true" data-bubble-theme="gold"></div>
     <h2 class="reveal" data-reveal="draw">Events</h2>
     <div class="event-grid">
 
       <!-- 3K RUN --->
-        <div class="event-card fade-in reveal" data-reveal="cascade">
+        <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
             <img src="reels-logo.webp" alt="3k RUN" class="event-logo">
             <h3>The 3K Run</h3>
             <p>Short Distance, Big Accomplishment</p>
@@ -242,7 +267,7 @@
         </div> 
 
         <!-- 5K RUN --->
-        <div class="event-card fade-in reveal" data-reveal="cascade">
+        <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
             <img src="five-logo.webp" alt="5k RUN" class="event-logo">
             <h3>The 5K Run</h3>
             <p>Forward is forward, No Matter How Slow You GO</p>
@@ -260,7 +285,7 @@
         </div>
 
         <!-- 10K RUN -->
-        <div class="event-card fade-in reveal" data-reveal="cascade">
+        <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
             <img src="ten-logo.webp" alt="10K RUN" class="event-logo">
             <h3>The 10K Run</h3>
             <p>Push Your Limits & Break Them</p>
@@ -395,9 +420,9 @@
    FOR MORE DETAILS CONTACT
 </h2>
     <div class="contact-box">
-        <p class="reveal" data-reveal="cascade"><strong>Mr. Clyde Dsouza</strong><br>Event Co-ordinator<br>+91 99015 60321</p>
-        <p class="reveal" data-reveal="cascade"><strong>Floyd Pinto</strong><br>Student Co-ordinator<br>+91 78995 88873</p>
-        <p class="reveal" data-reveal="cascade"><strong>Royston Jhowin Dcunha</strong><br>Media Co-ordinator<br>+91 94825 15690</p>
+        <p class="reveal tilt-card" data-reveal="cascade"><strong>Mr. Clyde Dsouza</strong><br>Event Co-ordinator<br>+91 99015 60321</p>
+        <p class="reveal tilt-card" data-reveal="cascade"><strong>Floyd Pinto</strong><br>Student Co-ordinator<br>+91 78995 88873</p>
+        <p class="reveal tilt-card" data-reveal="cascade"><strong>Royston Jhowin Dcunha</strong><br>Media Co-ordinator<br>+91 94825 15690</p>
     </div>
 </section>
 
