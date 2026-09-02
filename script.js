@@ -63,6 +63,66 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(tick);
   })();
 
+  /* =========================
+     🍔 NAV MENU (mobile toggle + scroll-spy)
+  ========================= */
+  (function initNavMenu() {
+    const toggle = document.getElementById("navToggle");
+    const menu = document.getElementById("navMenu");
+    const backdrop = document.getElementById("navBackdrop");
+    if (!toggle || !menu) return;
+ 
+    function openMenu() {
+      menu.classList.add("is-open");
+      backdrop?.classList.add("is-open");
+      toggle.setAttribute("aria-expanded", "true");
+      document.body.classList.add("nav-open");
+    }
+ 
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      backdrop?.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-open");
+    }
+ 
+    toggle.addEventListener("click", () => {
+      const isOpen = menu.classList.contains("is-open");
+      isOpen ? closeMenu() : openMenu();
+    });
+ 
+    backdrop?.addEventListener("click", closeMenu);
+ 
+    menu.querySelectorAll(".nav-link").forEach(link => {
+      link.addEventListener("click", closeMenu);
+    });
+ 
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeMenu();
+    });
+ 
+    // Scroll-spy: highlight the nav link for the section in view
+    const navLinks = Array.from(menu.querySelectorAll('.nav-link[href^="#"]'));
+    const sections = navLinks
+      .map(link => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+ 
+    if (sections.length && "IntersectionObserver" in window) {
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const link = navLinks.find(l => l.getAttribute("href") === `#${entry.target.id}`);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            navLinks.forEach(l => l.classList.remove("active-link"));
+            link.classList.add("active-link");
+          }
+        });
+      }, { threshold: 0.4, rootMargin: "-30% 0px -50% 0px" });
+ 
+      sections.forEach(section => spy.observe(section));
+    }
+  })();
+ 
 
   /* =========================
       ✅ AMENITIES TOGGLE (+ ripple)
