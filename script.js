@@ -699,34 +699,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })();
 
-
-  /* =========================================================
-     MOBILE ACTION BAR — appears once the hero is behind you
-  ========================================================= */
-  (function initMobileBar() {
-    const bar    = document.getElementById("mobileBar");
-    const header = document.querySelector(".site-header");
-    const footer = document.querySelector("footer");
-    if (!bar || !header) return;
-
-    let ticking = false;
-
-    function update() {
-      const pastHero  = window.scrollY > header.offsetHeight * 0.65;
-      const nearEnd   = footer
-        ? footer.getBoundingClientRect().top < window.innerHeight - 40
-        : false;
-      bar.classList.toggle("is-visible", pastHero && !nearEnd);
-      ticking = false;
-    }
-
-    window.addEventListener("scroll", () => {
-      if (!ticking) { requestAnimationFrame(update); ticking = true; }
-    }, { passive: true });
-
-    update();
-  })();
-
 });
 
 
