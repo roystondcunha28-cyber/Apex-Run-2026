@@ -3,36 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <title>APEX RUN 2026 | Milagres College</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000814">
 <meta name="description" content="APEX RUN 2026 — a national level marathon hosted by Milagres College, Mangaluru. 10th May 2026, 5:00 AM. 3K, 5K & 10K runs.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;800&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="apex-enhance.css"> 
 </head>
 
 <body>
 
 <!-- ============================
-     3D PRELOADER
+     PRELOADER — 3D running track
 ============================ -->
 <div id="preloader" class="preloader" role="status" aria-label="Loading Apex Run">
   <div class="preloader-inner">
-    <div class="loader-3d">
+    <div class="loader-3d" aria-hidden="true">
+      <div class="loader-lanes"></div>
       <div class="loader-ring ring-outer"></div>
       <div class="loader-ring ring-mid"></div>
       <div class="loader-ring ring-inner"></div>
       <div class="loader-baton"></div>
       <div class="loader-core"></div>
     </div>
-    <div class="loader-word">
-      <span class="loader-word-a">APEX</span><span class="loader-word-b">RUN</span>
+
+    <div class="loader-word" aria-hidden="true">
+      <span class="loader-word-a"><i style="--i:0">A</i><i style="--i:1">P</i><i style="--i:2">E</i><i style="--i:3">X</i></span>
+      <span class="loader-word-b"><i style="--i:4">R</i><i style="--i:5">U</i><i style="--i:6">N</i></span>
     </div>
-    <div class="loader-meter">
-      <div class="loader-meter-fill" id="loaderFill"></div>
-    </div>
+
+    <div class="loader-meter"><div class="loader-meter-fill" id="loaderFill"></div></div>
     <div class="loader-pct" id="loaderPercent">0%</div>
   </div>
 </div>
@@ -40,52 +42,71 @@
 <div class="curtain curtain-left" aria-hidden="true"></div>
 <div class="curtain curtain-right" aria-hidden="true"></div>
 
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
-<nav class="navbar">
-    <div class="logo">
+<!-- ============================
+     NAV
+============================ -->
+<nav class="navbar" id="navbar">
+    <a href="#top" class="logo">
         <img src="apex-run-logo.PNG" class="college-logo-small" alt="Apex Run logo">
         <span>APEX RUN 2026</span>
-    </div>
+    </a>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
         <span class="bar bar-1"></span>
         <span class="bar bar-2"></span>
         <span class="bar bar-3"></span>
     </button>
 
     <div class="nav-menu" id="navMenu">
-        <a href="#about" class="nav-link">About</a>
-        <a href="#highlights" class="nav-link">Highlights</a>
-        <a href="#events" class="nav-link">Events</a>
+        <a href="#about"      class="nav-link" style="--i:0">About</a>
+        <a href="#highlights" class="nav-link" style="--i:1">Highlights</a>
+        <a href="#events"     class="nav-link" style="--i:2">Events</a>
 
-        <div class="nav-dropdown" id="orgDropdown">
-            <button type="button" class="nav-link nav-dropdown-toggle" id="orgToggle" aria-haspopup="true" aria-expanded="false" aria-controls="orgMenu">
-                Organizers <span class="caret" aria-hidden="true">▾</span>
+        <div class="nav-dropdown" id="orgDropdown" style="--i:3">
+            <button type="button" class="nav-dropdown-toggle" id="orgToggle" aria-expanded="false" aria-controls="orgMenu">
+                Organisers <span class="caret" aria-hidden="true">▾</span>
             </button>
             <div class="nav-dropdown-menu" id="orgMenu">
-                <a href="about-icym.html" class="nav-dropdown-link">ICYM Mangalore</a>
-                <a href="about-milagres-college.html" class="nav-dropdown-link">Milagres College</a>
-                <a href="about-runners-club.html" class="nav-dropdown-link">Mangalore Runners Club</a>
+                <div class="nav-dropdown-inner">
+                    <a href="about-icym.html" class="nav-dropdown-link">
+                        <img src="icym-logo.PNG" alt=""> ICYM Mangalore
+                    </a>
+                    <a href="about-milagres-college.html" class="nav-dropdown-link">
+                        <img src="milagres-college.png" alt=""> Milagres College
+                    </a>
+                    <a href="about-runners-club.html" class="nav-dropdown-link">
+                        <img src="Munners-club-logo.PNG" alt=""> Mangalore Runners Club
+                    </a>
+                </div>
             </div>
         </div>
 
-        <a href="#registration" class="nav-link">Register</a>
-        <a href="#venue" class="nav-link">Venue</a>
-        <a href="#contact" class="nav-link">Contact</a>
-        <a href="https://www.instagram.com/milagres_college_mangalore?igsh=MTdkYzVmZjFlcm80NQ==" class="nav-link nav-follow">
-            <img src="instagram-logo.png" class="instagram-icon" alt=""> Follow Us
+        <a href="#registration" class="nav-link" style="--i:4">Register</a>
+        <a href="#venue"        class="nav-link" style="--i:5">Venue</a>
+        <a href="#contact"      class="nav-link" style="--i:6">Contact</a>
+        <a href="https://www.instagram.com/milagres_college_mangalore?igsh=MTdkYzVmZjFlcm80NQ==" class="nav-link nav-follow" style="--i:7">
+            <img src="instagram-logo.png" class="instagram-icon" alt=""> Follow us
         </a>
     </div>
 
     <div class="nav-backdrop" id="navBackdrop"></div>
 </nav>
 
-<header class="site-header">
+<!-- ============================
+     HERO
+============================ -->
+<header class="site-header" id="top">
 
-    <!-- CINEMATIC RUNNING BACKGROUND -->
     <div class="hero-bg" aria-hidden="true" id="heroBg">
         <div class="hero-sky"></div>
+        <div class="hero-sun"></div>
+
+        <!-- 3D road receding to the horizon -->
+        <div class="hero-road"><div class="hero-road-plane"></div></div>
+
         <canvas id="heroCanvas"></canvas>
 
         <svg class="hero-mist" viewBox="0 0 1600 400" preserveAspectRatio="none">
@@ -93,31 +114,39 @@
             <path class="mist-path mist-2" d="M0,260 Q400,320 800,260 T1600,260 V400 H0 Z"></path>
         </svg>
 
-        <!-- CINEMATIC ENERGY RINGS -->
-        <div class="hero-orbits" aria-hidden="true">
+        <div class="hero-orbits">
+            <span class="orbit orbit-1"></span>
             <span class="orbit orbit-2"></span>
             <span class="orbit orbit-3"></span>
         </div>
-        <div class="hero-embers" id="heroEmbers" aria-hidden="true"></div>
+
+        <div class="hero-embers" id="heroEmbers"></div>
+
+        <div class="speed-streaks">
+            <span class="streak s1"></span>
+            <span class="streak s2"></span>
+            <span class="streak s3"></span>
+        </div>
+
         <div class="hero-vignette"></div>
-        <div class="hero-grain" aria-hidden="true"></div>
+        <div class="hero-grain"></div>
     </div>
 
-    <div class="hero-content">
+    <div class="hero-content" id="heroContent">
         <div class="logo-row">
-            <a href="about-icym.html" class="org-logo-link" aria-label="Learn more about ICYM Mangalore">
-                <img src="icym-logo.PNG" class="college-logo-small" alt="ICYM Mangalore logo">
+            <a href="about-icym.html" class="org-logo-link" aria-label="About ICYM Mangalore">
+                <img src="icym-logo.PNG" alt="ICYM Mangalore logo">
             </a>
-            <a href="about-milagres-college.html" class="org-logo-link" aria-label="Learn more about Milagres College">
-                <img src="milagres-college.png" class="college-logo-small" alt="Milagres College logo">
+            <a href="about-milagres-college.html" class="org-logo-link" aria-label="About Milagres College">
+                <img src="milagres-college.png" alt="Milagres College logo">
             </a>
-            <a href="about-runners-club.html" class="org-logo-link" aria-label="Learn more about Mangalore Runners Club">
+            <a href="about-runners-club.html" class="org-logo-link" aria-label="About Mangalore Runners Club">
                 <img src="Munners-club-logo.PNG" class="club-logo-small" alt="Mangalore Runners Club logo">
             </a>
         </div>
-        <div class="presents">
-            <span>Presents</span>
-        </div>
+
+        <div class="presents"><span>Presents</span></div>
+
         <div class="logo-neon">
             <img src="Apex-run.PNG" class="apex-run-logo" alt="Apex Run 2026">
         </div>
@@ -125,75 +154,65 @@
         <div class="hero-info-bubble">
             <div class="hero-info-bubble-glow" aria-hidden="true"></div>
             <div class="hero-meta-item">
-                <svg viewBox="0 0 24 24" class="hero-meta-icon"><path d="M7 3v3M17 3v3M3.5 9h17M5 6h14a1.5 1.5 0 0 1 1.5 1.5V19A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V7.5A1.5 1.5 0 0 1 5 6Z"/></svg>
+                <svg viewBox="0 0 24 24" class="hero-meta-icon" aria-hidden="true"><path d="M7 3v3M17 3v3M3.5 9h17M5 6h14a1.5 1.5 0 0 1 1.5 1.5V19A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V7.5A1.5 1.5 0 0 1 5 6Z"/></svg>
                 <span>10 May 2026</span>
             </div>
             <div class="hero-meta-divider" aria-hidden="true"></div>
             <div class="hero-meta-item">
-                <svg viewBox="0 0 24 24" class="hero-meta-icon"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+                <svg viewBox="0 0 24 24" class="hero-meta-icon" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
                 <span>5:00 AM</span>
             </div>
             <div class="hero-meta-divider" aria-hidden="true"></div>
             <div class="hero-meta-item">
-                <svg viewBox="0 0 24 24" class="hero-meta-icon"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
+                <svg viewBox="0 0 24 24" class="hero-meta-icon" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
                 <span>Milagres College, Mangaluru</span>
             </div>
         </div>
 
-        <a href="#registration" class="hero-cta">
-            <span>Join The Run</span>
-            <svg viewBox="0 0 24 24" class="hero-cta-arrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <a href="#registration" class="hero-cta" data-magnetic>
+            <span>Join the run</span>
+            <svg viewBox="0 0 24 24" class="hero-cta-arrow" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
     </div>
 
     <div class="scroll-cue" aria-hidden="true">
+        <span class="scroll-cue-line"></span>
+        <span class="scroll-cue-text">Scroll</span>
     </div>
 </header>
 
-<!-- ABOUT -->
-<section id="about" class="about-section" style="padding-bottom: 30px;">
+<!-- ============================
+     ABOUT
+============================ -->
+<section id="about" class="about-section">
     <div class="bubbles" aria-hidden="true" data-bubble-theme="cyan"></div>
     <h2 class="reveal" data-reveal="draw">APEX RUN 2026</h2>
     <div class="info-frame reveal" data-reveal="rise">
         <span class="info-frame-corner tl" aria-hidden="true"></span>
         <span class="info-frame-corner br" aria-hidden="true"></span>
-        <p>Apex Run 2026 is a national level vibrant community marathon hosted by Milagres College, Mangaluru, in association with ICYM Mangalore and Mangalore Runners Club. Scheduled for 10th May 2026, the event brings together over 2500 participants including students, athletes, and fitness enthusiasts to promote health, endurance, and unity. With multiple race categories designed for all fitness levels, Apex Run aims to inspire an active lifestyle while strengthening community spirit and sports culture in the region.</p>
+        <p>Apex Run 2026 is a national level community marathon hosted by Milagres College, Mangaluru, in association with ICYM Mangalore and Mangalore Runners Club. Scheduled for 10th May 2026, the event brings together over 2500 participants including students, athletes and fitness enthusiasts to promote health, endurance and unity. With race categories designed for every fitness level, Apex Run aims to inspire an active lifestyle while strengthening community spirit and sports culture in the region.</p>
     </div>
-</section>
-
-<!-- EVENT GALLERY -->
-<section class="album-section" style="padding-top: 30px;">
-  <h2 class="gradient-heading reveal" data-reveal="draw">EVENT GALLERY</h2>
-
-  <div class="album-scroll">
-
-    <!-- ITEM 1 -->
-    <div class="album-item">
-      <img src="img3.jpeg" alt="Event Image">
-    </div>
-
-    <!-- ITEM 2 -->
-    <a href="#" class="album-item">
-      <img src="img1.jpeg" alt="Event Image">
-    </a>
-
-    <!-- ITEM 3 -->
-    <a href="#" class="album-item">
-      <img src="img2.jpeg" alt="Event Image">
-    </a>
-
-    <!-- ITEM 4 -->
-    <a href="#" class="album-item">
-      <img src="img4.jpeg" alt="Event Image">
-    </a>
-
-    <!-- ADD MORE -->
-
-  </div>
 </section>
 
 <!-- ============================
-     EVENT HIGHLIGHTS (auto-scrolling images + video clips)
+     GALLERY
+============================ -->
+<section class="album-section">
+  <h2 class="gradient-heading reveal" data-reveal="draw">EVENT GALLERY</h2>
+
+  <div class="album-scroll" id="albumScroll">
+    <div class="album-item"><img src="img3.jpeg" alt="Runners at Apex Run"></div>
+    <div class="album-item"><img src="img1.jpeg" alt="Runners at Apex Run"></div>
+    <div class="album-item"><img src="img2.jpeg" alt="Runners at Apex Run"></div>
+    <div class="album-item"><img src="img4.jpeg" alt="Runners at Apex Run"></div>
+    <!-- ADD MORE GALLERY ITEMS HERE -->
+  </div>
+
+  <div class="album-dots" id="albumDots" aria-hidden="true"></div>
+</section>
+
+<!-- ============================
+     HIGHLIGHTS
 ============================ -->
 <section id="highlights" class="highlights-section">
   <h2 class="gradient-heading reveal" data-reveal="draw">EVENT HIGHLIGHTS</h2>
@@ -240,100 +259,98 @@
   </div>
 </section>
 
-<!-- GENERAL RULES -->
+<!-- ============================
+     GUIDELINES — neon animated frame
+============================ -->
 <section class="rules-section reveal" data-reveal="rise">
-   <h2 class="gradient-text">GUIDELINES</h2>
-    <ol>
-  <li>The event includes <strong>10 KM and 5 KM competitive runs</strong>, and a <strong>3 KM fun run</strong>.</li>
-
-  <li>All participants must register in advance and wear their <strong>bib number visibly</strong> during the race.</li>
-
-  <li>Winners will be awarded separately in <strong>Men’s and Women’s categories</strong> for <strong>5 KM and 10 KM</strong>.</li>
-
-  <li><strong>1st Place:</strong> Cash Prize + Trophy</li>
-
-  <li><strong>2nd Place:</strong> Cash Prize + Smaller Trophy</li>
-
-  <li>Winners may also receive <strong>vouchers</strong> in addition to prizes.</li>
-
-  <li>The <strong>3 KM run</strong> is a non-competitive fun run, and no prizes will be awarded.</li>
-
-  <li>A <strong>Lucky Bib Prize</strong> will be given to one participant selected randomly.</li>
-
-  <li>A <strong>Reel Contest</strong> will be conducted; details will be shared separately, and winners will receive a cash prize.</li>
-
-  <li>Participants must follow the route and instructions given by organizers and volunteers.</li>
-
-  <li>Any misconduct or cheating will result in <strong>disqualification</strong>.</li>
-
-  <li>Participants must ensure they are medically fit to participate.</li>
-
-  <li>The organizer’s decision will be final in all matters.</li>
-    </ol>
+  <div class="neon-frame">
+    <span class="neon-frame-spin" aria-hidden="true"></span>
+    <div class="neon-frame-inner">
+      <h2 class="gradient-text">GUIDELINES</h2>
+      <ol>
+        <li>The event includes <strong>10 KM and 5 KM competitive runs</strong>, and a <strong>3 KM fun run</strong>.</li>
+        <li>All participants must register in advance and wear their <strong>bib number visibly</strong> during the race.</li>
+        <li>Winners will be awarded separately in <strong>men's and women's categories</strong> for <strong>5 KM and 10 KM</strong>.</li>
+        <li><strong>1st place:</strong> cash prize and trophy.</li>
+        <li><strong>2nd place:</strong> cash prize and smaller trophy.</li>
+        <li>Winners may also receive <strong>vouchers</strong> in addition to prizes.</li>
+        <li>The <strong>3 KM run</strong> is a non-competitive fun run, and no prizes will be awarded.</li>
+        <li>A <strong>lucky bib prize</strong> will be given to one participant selected at random.</li>
+        <li>A <strong>reel contest</strong> will be conducted; details will be shared separately, and winners will receive a cash prize.</li>
+        <li>Participants must follow the route and instructions given by organisers and volunteers.</li>
+        <li>Any misconduct or cheating will result in <strong>disqualification</strong>.</li>
+        <li>Participants must ensure they are medically fit to participate.</li>
+        <li>The organiser's decision will be final in all matters.</li>
+      </ol>
+    </div>
+  </div>
 </section>
 
-<!-- EVENTS -->
+<!-- ============================
+     EVENTS
+============================ -->
 <section id="events" class="event-section">
     <div class="bubbles" aria-hidden="true" data-bubble-theme="gold"></div>
     <h2 class="reveal" data-reveal="draw">Events</h2>
+
     <div class="event-grid">
 
-      <!-- 3K RUN -->
-        <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
+        <!-- 3K -->
+        <div class="event-card reveal tilt-card" data-reveal="cascade">
             <span class="info-frame-corner tl" aria-hidden="true"></span>
             <span class="info-frame-corner br" aria-hidden="true"></span>
-            <img src="reels-logo.webp" alt="3K Run" class="event-logo">
+            <div class="event-logo-wrap"><img src="reels-logo.webp" alt="" class="event-logo"></div>
             <h3>The 3K Run</h3>
-            <p>Short Distance, Big Accomplishment</p>
-            <p>₹250</p>
+            <p class="event-tagline">Short distance, big accomplishment</p>
+            <p class="event-price">₹250</p>
             <button class="rules-toggle" aria-controls="3k-rules" aria-expanded="false">Amenities</button>
-           <div id="3k-rules" class="event-rules">
+            <div id="3k-rules" class="event-rules">
                 <ul>
-                    <li><strong>E-Certificate</strong>.</li>
-                    <li><strong>BIB Number</strong>.</li>
-                    <li><strong>Medal</strong>.</li>
-                    <li><strong>T-Shirt</strong>.</li>
-                    <li><strong>Refreshments</strong>.</li>
+                    <li>E-certificate</li>
+                    <li>Bib number</li>
+                    <li>Medal</li>
+                    <li>T-shirt</li>
+                    <li>Refreshments</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 5K RUN -->
-        <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
+        <!-- 5K -->
+        <div class="event-card reveal tilt-card" data-reveal="cascade">
             <span class="info-frame-corner tl" aria-hidden="true"></span>
             <span class="info-frame-corner br" aria-hidden="true"></span>
-            <img src="five-logo.webp" alt="5K Run" class="event-logo">
+            <div class="event-logo-wrap"><img src="five-logo.webp" alt="" class="event-logo"></div>
             <h3>The 5K Run</h3>
-            <p>Forward is forward, No Matter How Slow You GO</p>
-            <p>₹350</p>
+            <p class="event-tagline">Forward is forward, no matter how slow you go</p>
+            <p class="event-price">₹350</p>
             <button class="rules-toggle" aria-controls="5k-rules" aria-expanded="false">Amenities</button>
-           <div id="5k-rules" class="event-rules">
+            <div id="5k-rules" class="event-rules">
                 <ul>
-                    <li><strong>E-Certificate</strong>.</li>
-                    <li><strong>BIB Number</strong>.</li>
-                    <li><strong>Medal</strong>.</li>
-                    <li><strong>T-Shirt</strong>.</li>
-                    <li><strong>Refreshments</strong>.</li>
+                    <li>E-certificate</li>
+                    <li>Bib number</li>
+                    <li>Medal</li>
+                    <li>T-shirt</li>
+                    <li>Refreshments</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 10K RUN -->
-        <div class="event-card fade-in reveal tilt-card" data-reveal="cascade">
+        <!-- 10K -->
+        <div class="event-card reveal tilt-card" data-reveal="cascade">
             <span class="info-frame-corner tl" aria-hidden="true"></span>
             <span class="info-frame-corner br" aria-hidden="true"></span>
-            <img src="ten-logo.webp" alt="10K Run" class="event-logo">
+            <div class="event-logo-wrap"><img src="ten-logo.webp" alt="" class="event-logo"></div>
             <h3>The 10K Run</h3>
-            <p>Push Your Limits &amp; Break Them</p>
-            <p>₹450</p>
-           <button class="rules-toggle" aria-controls="10k-rules" aria-expanded="false">Amenities</button>
-           <div id="10k-rules" class="event-rules">
+            <p class="event-tagline">Push your limits and break them</p>
+            <p class="event-price">₹450</p>
+            <button class="rules-toggle" aria-controls="10k-rules" aria-expanded="false">Amenities</button>
+            <div id="10k-rules" class="event-rules">
                 <ul>
-                    <li><strong>E-Certificate</strong>.</li>
-                    <li><strong>BIB Number</strong>.</li>
-                    <li><strong>Medal</strong>.</li>
-                    <li><strong>T-Shirt</strong>.</li>
-                    <li><strong>Refreshments</strong>.</li>
+                    <li>E-certificate</li>
+                    <li>Bib number</li>
+                    <li>Medal</li>
+                    <li>T-shirt</li>
+                    <li>Refreshments</li>
                 </ul>
             </div>
         </div>
@@ -341,142 +358,158 @@
     </div>
 </section>
 
-<h2 class="gradient-heading reveal" data-reveal="draw">REGISTER HERE</h2>
-
+<!-- ============================
+     REGISTRATION
+     Set data-closed="1" on the section to switch to the closed notice.
+============================ -->
 <section id="registration" class="registration-section">
+  <h2 class="gradient-heading reveal" data-reveal="draw">REGISTER HERE</h2>
+
   <form id="registrationForm" class="registration-card reveal" data-reveal="rise">
 
-<!-- PERSONAL DETAILS -->
-<div class="form-group">
-  <h3>Personal Details</h3>
-<input type="text" name="name" placeholder="Runner's Name" required>
-<input type="text" name="location" placeholder="Location / Area" required>
-<input type="tel" name="phone" placeholder="Phone Number" required>
-<input type="email" name="email" placeholder="Email ID" required>
-<input type="number" name="age" id="age" placeholder="Age" required>
-<input type="text" name="organisation" placeholder="Organisation" required>
-</div>
-
-<!-- RUN SELECTION -->
-<div class="form-group">
-  <h3>Select Run</h3>
-
-<div class="run-voltage-group">
-
-  <label class="voltage-option">
-    <input type="radio" name="run" value="3K" required>
-    <span>3K</span>
-  </label>
-
-  <label class="voltage-option">
-    <input type="radio" name="run" value="5K">
-    <span>5K</span>
-  </label>
-
-  <label class="voltage-option">
-    <input type="radio" name="run" value="10K">
-    <span>10K</span>
-  </label>
-
-  </div>
-</div>
-
-<!-- SIZE SELECTION -->
-<div class="form-group">
-  <h3>T-Shirt Size</h3>
-
-  <!-- KIDS -->
-  <p class="size-label">Kids Sizes</p>
-  <div class="option-grid kids-grid">
-    <label class="select-box"><input type="radio" name="size" value="6-8Y" required><span>6–8 Y</span></label>
-    <label class="select-box"><input type="radio" name="size" value="8-10Y"><span>8–10 Y</span></label>
-    <label class="select-box"><input type="radio" name="size" value="10-12Y"><span>10–12 Y</span></label>
-  </div>
-
-  <!-- ADULT -->
-  <p class="size-label">Adult Sizes</p>
-  <div class="option-grid adult-grid">
-    <label class="select-box"><input type="radio" name="size" value="XS"><span>XS</span></label>
-    <label class="select-box"><input type="radio" name="size" value="S"><span>S</span></label>
-    <label class="select-box"><input type="radio" name="size" value="M"><span>M</span></label>
-    <label class="select-box"><input type="radio" name="size" value="L"><span>L</span></label>
-    <label class="select-box"><input type="radio" name="size" value="XL"><span>XL</span></label>
-    <label class="select-box"><input type="radio" name="size" value="XXL"><span>XXL</span></label>
-    <label class="select-box"><input type="radio" name="size" value="XXXL"><span>XXXL</span></label>
-  </div>
-
-  <p id="sizeSuggestion" class="size-note"></p>
-</div>
-
-<!-- PAYMENT QR -->
-<div class="qr-section">
-  <h3>Scan &amp; Pay</h3>
-<img id="qrImage" class="qr-image" style="display:none;" alt="Payment QR">
-<p id="qrLabel" class="qr-note">Select a run to view payment QR</p>
-</div>
-    <div class="form-group" id="utrGroup" style="display:none;">
-  <h3>Payment Confirmation</h3>
-  <input type="text" name="utr" id="utrInput" placeholder="Enter UTR / Transaction ID" required>
-  <p class="qr-note">⚠️ Registration will only be completed after entering UTR</p>
-</div>
-    <div class="submit-button">
-<button type="submit" class="register-btn">Complete Registration</button>
+    <div class="form-group">
+      <h3>Personal details</h3>
+      <input type="text"   name="name"         placeholder="Runner's name" autocomplete="name" required>
+      <input type="text"   name="location"     placeholder="Location / area" required>
+      <input type="tel"    name="phone"        placeholder="Phone number" inputmode="numeric" autocomplete="tel" required>
+      <input type="email"  name="email"        placeholder="Email ID" autocomplete="email" required>
+      <input type="number" name="age" id="age" placeholder="Age" inputmode="numeric" min="1" max="99" required>
+      <input type="text"   name="organisation" placeholder="Organisation" required>
     </div>
-</form>
+
+    <div class="form-group">
+      <h3>Select run</h3>
+      <div class="run-voltage-group">
+        <label class="voltage-option"><input type="radio" name="run" value="3K" required><span>3K</span></label>
+        <label class="voltage-option"><input type="radio" name="run" value="5K"><span>5K</span></label>
+        <label class="voltage-option"><input type="radio" name="run" value="10K"><span>10K</span></label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <h3>T-shirt size</h3>
+
+      <p class="size-label">Kids sizes</p>
+      <div class="option-grid kids-grid">
+        <label class="select-box"><input type="radio" name="size" value="6-8Y" required><span>6–8 Y</span></label>
+        <label class="select-box"><input type="radio" name="size" value="8-10Y"><span>8–10 Y</span></label>
+        <label class="select-box"><input type="radio" name="size" value="10-12Y"><span>10–12 Y</span></label>
+      </div>
+
+      <p class="size-label">Adult sizes</p>
+      <div class="option-grid adult-grid">
+        <label class="select-box"><input type="radio" name="size" value="XS"><span>XS</span></label>
+        <label class="select-box"><input type="radio" name="size" value="S"><span>S</span></label>
+        <label class="select-box"><input type="radio" name="size" value="M"><span>M</span></label>
+        <label class="select-box"><input type="radio" name="size" value="L"><span>L</span></label>
+        <label class="select-box"><input type="radio" name="size" value="XL"><span>XL</span></label>
+        <label class="select-box"><input type="radio" name="size" value="XXL"><span>XXL</span></label>
+        <label class="select-box"><input type="radio" name="size" value="XXXL"><span>XXXL</span></label>
+      </div>
+
+      <p id="sizeSuggestion" class="size-note"></p>
+    </div>
+
+    <div class="qr-section">
+      <h3>Scan and pay</h3>
+      <img id="qrImage" class="qr-image" style="display:none;" alt="Payment QR code">
+      <p id="qrLabel" class="qr-note">Select a run to view the payment QR</p>
+    </div>
+
+    <div class="form-group" id="utrGroup" style="display:none;">
+      <h3>Payment confirmation</h3>
+      <input type="text" name="utr" id="utrInput" placeholder="Enter UTR / transaction ID">
+      <p class="qr-note">Registration completes only after you enter the UTR.</p>
+    </div>
+
+    <div class="submit-button">
+      <button type="submit" class="register-btn">Complete registration</button>
+    </div>
+  </form>
+
   <div class="registration-closed">
     <h3>REGISTRATIONS CLOSED</h3>
-    <p>Thank you for the overwhelming response to APEX RUN 2026!</p>
-    <p>Online registrations are now officially closed.<br>We sincerely thank all participants for being a part of this incredible journey.</p>
-    <p>See you at the starting line.<br><strong>Run Beyond Limits.</strong></p>
+    <p>Thank you for the overwhelming response to Apex Run 2026.</p>
+    <p>Online registrations are now closed. We sincerely thank everyone who was part of this journey.</p>
+    <p>See you at the starting line.<br><strong>Run beyond limits.</strong></p>
   </div>
 </section>
 
-<!-- ROUTE MAP -->
+<!-- ============================
+     ROUTE MAP
+============================ -->
 <section class="roadmap-section">
   <h2 class="gradient-heading reveal" data-reveal="draw">ROUTE MAP</h2>
-
   <a href="https://maps.app.goo.gl/qbdopUji7XgzrV9k6" class="roadmap-card reveal" data-reveal="scale">
-    <img src="roadmap.PNG" alt="Apex Run Route Map">
-
-    <div class="roadmap-overlay">
-      <span>View Full Route</span>
-    </div>
+    <img src="roadmap.PNG" alt="Apex Run route map">
+    <div class="roadmap-overlay"><span>View full route</span></div>
   </a>
 </section>
 
-<!-- VENUE -->
+<!-- ============================
+     VENUE
+============================ -->
 <section id="venue" class="venue-section">
     <h2 class="gradient-heading reveal" data-reveal="draw">EVENT LOCATION</h2>
-    <p>Milagres College - Athena Hospital - Unity Hospital - Father Muller Hospital - Jeppu - Koti Chennaya Circle - KMC Hospital - Casa Grande - Sturrock Road - Avery Junction - Milagres College</p>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.710827347024!2d74.79934407587027!3d12.87486219087878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a4c66670121%3A0x8795747a583dd784!2sMilagres%20College!5e0!3m2!1sen!2sin!4v1697400000000!5m2!1sen!2sin" width="100%" height="400" style="border-radius:15px;" loading="lazy" class="reveal" data-reveal="scale" title="Milagres College location map"></iframe>
+    <p>Milagres College — Athena Hospital — Unity Hospital — Father Muller Hospital — Jeppu — Koti Chennaya Circle — KMC Hospital — Casa Grande — Sturrock Road — Avery Junction — Milagres College</p>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.710827347024!2d74.79934407587027!3d12.87486219087878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a4c66670121%3A0x8795747a583dd784!2sMilagres%20College!5e0!3m2!1sen!2sin!4v1697400000000!5m2!1sen!2sin" width="100%" height="400" loading="lazy" class="reveal" data-reveal="scale" title="Milagres College location map"></iframe>
 </section>
 
-<!-- CONTACT -->
+<!-- ============================
+     CONTACT
+============================ -->
 <section id="contact">
-    <h2 class="gradient-heading reveal" data-reveal="draw">FOR MORE DETAILS CONTACT</h2>
+    <h2 class="gradient-heading reveal" data-reveal="draw">GET IN TOUCH</h2>
     <div class="contact-box">
-        <p class="reveal tilt-card" data-reveal="cascade"><strong>Mr. Clyde Dsouza</strong><br>Event Co-ordinator<br>+91 99015 60321</p>
-        <p class="reveal tilt-card" data-reveal="cascade"><strong>Floyd Pinto</strong><br>Student Co-ordinator<br>+91 78995 88873</p>
-        <p class="reveal tilt-card" data-reveal="cascade"><strong>Royston Jhowin Dcunha</strong><br>Media Co-ordinator<br>+91 94825 15690</p>
+        <div class="contact-card reveal tilt-card" data-reveal="cascade">
+            <strong>Clyde Dsouza</strong>
+            <span class="contact-role">Event co-ordinator</span>
+            <a href="tel:+919901560321">+91 99015 60321</a>
+        </div>
+        <div class="contact-card reveal tilt-card" data-reveal="cascade">
+            <strong>Floyd Pinto</strong>
+            <span class="contact-role">Student co-ordinator</span>
+            <a href="tel:+917899588873">+91 78995 88873</a>
+        </div>
+        <div class="contact-card reveal tilt-card" data-reveal="cascade">
+            <strong>Royston Jhowin Dcunha</strong>
+            <span class="contact-role">Media co-ordinator</span>
+            <a href="tel:+919482515690">+91 94825 15690</a>
+        </div>
     </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ============================
+     FOOTER
+============================ -->
 <footer>
-    <p>Web Developed by Royston Jhowin Dcunha</p>
+    <p>Web developed by Royston Jhowin Dcunha</p>
     <a href="https://www.instagram.com/idlisandframes?igsh=Nm1jdm92OXdvZjFi&utm_source=qr">
-        <img src="instagram-logo.png" class="instagram-icon" alt=""> Follow @idlisnframes
+        <img src="instagram-logo.png" class="instagram-icon" alt=""> @idlisnframes
     </a>
     <p>Hampankatta, Mangaluru – 575001</p>
-    <p>© APEXRUN’26</p>
+    <p>© APEX RUN '26</p>
 </footer>
+
+<!-- ============================
+     MOBILE ACTION BAR
+============================ -->
+<div class="mobile-bar" id="mobileBar">
+  <a href="#registration" class="bar-primary">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg> Register
+  </a>
+  <a href="tel:+919901560321" class="bar-secondary">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"/></svg> Call
+  </a>
+</div>
+
+<div id="lightbox" class="lightbox">
+  <span class="close-btn" role="button" tabindex="0" aria-label="Close image">&times;</span>
+  <img class="lightbox-img" src="" alt="">
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
 <script src="script.js"></script>
-<div id="lightbox" class="lightbox">
-  <span class="close-btn">&times;</span>
-  <img class="lightbox-img" src="" alt="">
-</div>
 
 </body>
 </html>
