@@ -18,9 +18,8 @@
    14. Route map + venue
    15. Contact + footer
    16. Lightbox
-   17. Mobile action bar
-   18. Organiser sub-pages
-   19. Responsive + reduced motion
+   17. Organiser sub-pages
+   18. Responsive + reduced motion
 ================================================================== */
 
 /* ==============================
@@ -544,6 +543,10 @@ input:focus-visible,
 @media (max-width: 900px) {
   .nav-toggle { display: flex; }
 
+  /* the wordmark sits above the sheet, so hide it while the sheet is open */
+  .logo { transition: opacity 0.25s ease; }
+  body.nav-open .logo { opacity: 0; pointer-events: none; }
+
   .nav-menu {
     position: fixed;
     inset: 0 0 0 auto;
@@ -554,7 +557,7 @@ input:focus-visible,
     align-items: stretch;
     justify-content: flex-start;
     gap: 0;
-    padding: calc(var(--nav-h) + 26px) 26px 40px;
+    padding: calc(var(--nav-h) + env(safe-area-inset-top) + 26px) 26px 40px;
     background:
       radial-gradient(120% 60% at 100% 0%, rgba(0,240,255,0.10), transparent 60%),
       linear-gradient(165deg, #00182e, #000509 78%);
@@ -625,6 +628,7 @@ input:focus-visible,
     position: static;
     display: block;
     min-width: 0;
+    left: auto;
     height: 0;              /* JS animates this to scrollHeight */
     padding: 0;
     margin: 0;
@@ -640,7 +644,13 @@ input:focus-visible,
 
   .nav-dropdown-menu::before { display: none; }
 
-  .nav-dropdown.is-open .nav-dropdown-menu { opacity: 1; }
+  /* must repeat transform here: the desktop .nav-dropdown.is-open rule
+     outranks the plain .nav-dropdown-menu selector above and would
+     otherwise shift the open panel off-screen by half its width */
+  .nav-dropdown.is-open .nav-dropdown-menu {
+    opacity: 1;
+    transform: none;
+  }
 
   /* hairline spine connecting the sub-items */
   .nav-dropdown-menu > .nav-dropdown-inner {
@@ -721,57 +731,6 @@ input:focus-visible,
   to   { background-position: 0% 34%; }
 }
 
-/* Sun cresting the horizon */
-.hero-sun {
-  position: absolute;
-  left: 50%;
-  bottom: 6%;
-  width: clamp(200px, 42vw, 380px);
-  aspect-ratio: 1;
-  translate: -50% 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,214,150,0.95), rgba(255,140,80,0.5) 46%, transparent 72%);
-  filter: blur(3px);
-  animation: sunPulse 7s ease-in-out infinite;
-}
-
-@keyframes sunPulse {
-  0%, 100% { opacity: 0.7;  transform: scale(1); }
-  50%      { opacity: 1;    transform: scale(1.07); }
-}
-
-/* --- 3D receding road: the depth cue that makes the hero feel filmic --- */
-.hero-road {
-  position: absolute;
-  left: -20%;
-  right: -20%;
-  bottom: -2%;
-  height: 46%;
-  z-index: 2;
-  perspective: 340px;
-  perspective-origin: 50% 0%;
-  overflow: hidden;
-  opacity: 0.5;
-  mask-image: linear-gradient(180deg, transparent, #000 42%, #000 88%, transparent);
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 42%, #000 88%, transparent);
-}
-
-.hero-road-plane {
-  position: absolute;
-  inset: -60% 0 0;
-  transform: rotateX(74deg);
-  transform-origin: 50% 100%;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(0,240,255,0.30) 0 1px, transparent 1px 92px),
-    repeating-linear-gradient(0deg,  rgba(255,183,3,0.22) 0 2px, transparent 2px 100px);
-  animation: roadRush 2.6s linear infinite;
-}
-
-@keyframes roadRush {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 0 0, 0 100px; }
-}
-
 #heroCanvas {
   position: absolute;
   inset: 0;
@@ -817,7 +776,6 @@ input:focus-visible,
   border: 1px solid rgba(0,240,255,0.12);
 }
 
-.orbit-1 { inset: 20%; animation: spin 44s linear infinite; }
 .orbit-2 { inset: 9%;  animation: spinBack 66s linear infinite; border-style: dashed; border-color: rgba(255,183,3,0.13); }
 .orbit-3 { inset: 0;   animation: orbitPulse 7s ease-in-out infinite; border-color: rgba(0,240,255,0.07); }
 
@@ -849,30 +807,6 @@ input:focus-visible,
   12%  { opacity: 0.85; }
   85%  { opacity: 0.45; }
   100% { transform: translate(var(--drift, 24px), -110vh); opacity: 0; }
-}
-
-/* Speed streaks */
-.speed-streaks { position: absolute; inset: 0; z-index: 6; overflow: hidden; mix-blend-mode: screen; pointer-events: none; }
-
-.streak {
-  position: absolute;
-  left: -34%;
-  width: 42%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0,240,255,0.6), transparent);
-  filter: blur(1px);
-  animation: streakRun 3.6s linear infinite;
-}
-
-.s1 { top: 30%; animation-delay: 0s; }
-.s2 { top: 54%; animation-delay: 1.2s; background: linear-gradient(90deg, transparent, rgba(255,183,3,0.55), transparent); }
-.s3 { top: 72%; animation-delay: 2.4s; }
-
-@keyframes streakRun {
-  0%   { transform: translateX(0);    opacity: 0; }
-  12%  { opacity: 1; }
-  88%  { opacity: 1; }
-  100% { transform: translateX(350%); opacity: 0; }
 }
 
 .hero-vignette {
@@ -1144,42 +1078,6 @@ body.hero-ready .hero-content { animation: heroIn 1.2s var(--ease) forwards; }
   transition: transform 0.3s ease;
 }
 .hero-cta:hover .hero-cta-arrow { transform: translateX(5px); }
-
-/* Scroll cue */
-.scroll-cue {
-  position: absolute;
-  bottom: 24px; left: 50%;
-  translate: -50% 0;
-  z-index: 9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-}
-
-body.hero-ready .scroll-cue { animation: cueIn 1s ease forwards 1.4s; }
-@keyframes cueIn { to { opacity: 0.72; } }
-
-.scroll-cue-line {
-  width: 1px;
-  height: 36px;
-  background: linear-gradient(180deg, var(--cyan), transparent);
-  animation: cueMove 1.9s ease-in-out infinite;
-}
-
-@keyframes cueMove {
-  0%   { transform: scaleY(0.25); opacity: 0; }
-  50%  { transform: scaleY(1);    opacity: 1; }
-  100% { transform: scaleY(0.25); opacity: 0; }
-}
-
-.scroll-cue-text {
-  font-size: 0.64rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  opacity: 0.7;
-}
 
 /* Cursor spotlight */
 .cursor-glow {
@@ -2324,63 +2222,7 @@ footer a:hover { background: rgba(0,240,255,0.08); color: var(--cyan); }
 .close-btn:hover { background: rgba(255,60,60,0.35); }
 
 /* ==============================
-   17. MOBILE ACTION BAR
-============================== */
-.mobile-bar {
-  position: fixed;
-  left: 12px; right: 12px;
-  bottom: max(12px, env(safe-area-inset-bottom));
-  z-index: 990;
-  display: none;
-  gap: 10px;
-  padding: 9px;
-  border-radius: 22px;
-  background: rgba(0, 8, 20, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid var(--hairline-cyan);
-  box-shadow: 0 18px 44px rgba(0,0,0,0.55);
-  transform: translateY(150%);
-  transition: transform 0.55s var(--ease);
-}
-
-.mobile-bar.is-visible { transform: translateY(0); }
-
-.mobile-bar a {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 13px 10px;
-  border-radius: 15px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-}
-
-.mobile-bar .bar-primary {
-  background: linear-gradient(45deg, var(--gold), var(--orange));
-  color: #000;
-  box-shadow: 0 6px 20px rgba(255,140,0,0.32);
-}
-
-.mobile-bar .bar-secondary {
-  color: var(--cyan);
-  border: 1px solid rgba(0,240,255,0.3);
-  background: rgba(0,240,255,0.06);
-}
-
-.mobile-bar svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-@media (max-width: 900px) {
-  .mobile-bar { display: flex; }
-  body { padding-bottom: 78px; }
-  body.nav-open .mobile-bar { transform: translateY(150%); }
-}
-
-/* ==============================
-   18. ORGANISER SUB-PAGES
+   17. ORGANISER SUB-PAGES
 ============================== */
 .org-hero {
   position: relative;
@@ -2462,7 +2304,7 @@ footer a:hover { background: rgba(0,240,255,0.08); color: var(--cyan); }
 .org-body p { margin-bottom: 16px; opacity: 0.88; font-size: clamp(0.9rem, 2vw, 1.02rem); }
 
 /* ==============================
-   19. RESPONSIVE
+   18. RESPONSIVE
 ============================== */
 @media (max-width: 640px) {
   .site-header { padding: calc(var(--nav-h) + 24px) 16px 84px; }
@@ -2526,7 +2368,7 @@ footer a:hover { background: rgba(0,240,255,0.08); color: var(--cyan); }
   }
 
   .reveal { opacity: 1 !important; transform: none !important; }
-  .bubbles, .hero-embers, .speed-streaks, .hero-road { display: none; }
+  .bubbles, .hero-embers { display: none; }
   .neon-frame-spin { background: linear-gradient(120deg, var(--cyan), var(--gold)); }
   .highlights-track { animation: none; }
   .highlights-marquee { overflow-x: auto; -webkit-overflow-scrolling: touch; }
