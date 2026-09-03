@@ -665,7 +665,18 @@ input:focus-visible,
     width: 1px;
     background: linear-gradient(180deg, var(--cyan), transparent);
   }
+@media (min-width: 901px) {
+  .nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+  }
 
+  .nav-dropdown.is-open .nav-dropdown-menu {
+    transform: translateX(-50%) translateY(0);
+  }
+}
   .nav-dropdown-link {
     padding: 12px 6px;
     font-size: 0.96rem;
@@ -1198,19 +1209,6 @@ h2.in-view::after { transform: scaleX(1); }
 ============================== */
 .about-section { overflow: hidden; }
 .about-section h2 { color: #4fc3fc; position: relative; z-index: 2; }
-
-.about-section h2::before {
-  content: "";
-  display: block;
-  width: 1px; height: 48px;
-  margin: 0 auto 22px;
-  background: linear-gradient(180deg, transparent, var(--cyan));
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 1s var(--ease) 0.15s;
-}
-
-.about-section h2.in-view::before { transform: scaleY(1); }
 
 .info-frame {
   position: relative;
@@ -2314,7 +2312,7 @@ footer a:hover { background: rgba(0,240,255,0.08); color: var(--cyan); }
   .hero-cta { padding: 14px 34px; font-size: 1.05rem; }
 
   section { padding: clamp(48px, 11vw, 64px) 16px; }
-
+  .about-section { padding-top: 28px; }
   .neon-frame-inner { padding: 30px 18px; border-radius: 22px; }
   .neon-frame { border-radius: 24px; }
 
