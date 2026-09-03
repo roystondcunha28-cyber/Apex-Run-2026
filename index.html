@@ -19,9 +19,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;800&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!-- The hero logo is the largest thing on screen; fetch it first. -->
+<link rel="preload" as="image" href="Apex-run.PNG">
+
+<!-- If scripts never run, nothing stays hidden behind the preloader. -->
+<noscript><style>
+  #preloader, .curtain, .rail-btn, .back-top { display: none !important; }
+  body.is-loading { overflow: auto !important; height: auto !important; }
+  .reveal, .album-item, .highlight-item { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .hero-content { opacity: 1 !important; transform: none !important; animation: none !important; }
+</style></noscript>
 </head>
 
-<body>
+<body class="is-loading">
 
 <!-- ============================
      PRELOADER — 3D running track
@@ -78,7 +89,7 @@
                 Organisers <span class="caret" aria-hidden="true">▾</span>
             </button>
             <div class="nav-dropdown-menu" id="orgMenu">
-                <div class="nav-dropdown-inner">
+                <div class="nav-dropdown-inner" data-stagger>
                     <a href="about-icym.html" class="nav-dropdown-link">
                         <img src="icym-logo.PNG" alt=""> ICYM Mangalore
                     </a>
@@ -145,7 +156,7 @@
         <div class="presents"><span>Presents</span></div>
 
         <div class="logo-neon">
-            <img src="Apex-run.PNG" class="apex-run-logo" alt="Apex Run 2026">
+            <img src="Apex-run.PNG" class="apex-run-logo" alt="Apex Run 2026" fetchpriority="high">
         </div>
 
         <div class="hero-info-bubble">
@@ -172,6 +183,11 @@
         </a>
     </div>
 
+    <div class="hero-scroll" aria-hidden="true">
+        <span class="hero-scroll-line"></span>
+        <span>Scroll</span>
+    </div>
+
 </header>
 
 <!-- ============================
@@ -189,21 +205,33 @@
 
 <!-- ============================
      GALLERY
+     Wrapped in a rail: drag, arrows, dots and keys all drive it.
 ============================ -->
 <section class="album-section">
   <h2 class="gradient-heading reveal" data-reveal="draw">EVENT GALLERY</h2>
 
-  <div class="album-scroll" id="albumScroll">
-    <div class="album-item"><img src="img3.jpeg" alt="Runners at Apex Run" loading="lazy"></div>
-    <div class="album-item"><img src="img1.jpeg" alt="Runners at Apex Run" loading="lazy"></div>
-    <div class="album-item"><img src="img2.jpeg" alt="Runners at Apex Run" loading="lazy"></div>
-    <div class="album-item"><img src="img6.jpeg" alt="Runners at Apex Run" loading="lazy"></div>
-    <div class="album-item"><img src="img5.jpeg" alt="Runners at Apex Run" loading="lazy"></div>
-    <div class="album-item"><img src="img4.jpeg" alt="Runners at Apex Run" loading="lazy"></div>
-    <!-- ADD MORE GALLERY ITEMS HERE -->
+  <div class="rail" data-rail>
+    <button type="button" class="rail-btn rail-prev" aria-label="Previous photo" aria-controls="albumScroll">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+
+    <div class="album-scroll" id="albumScroll" tabindex="0" role="region" aria-label="Event photo gallery, scrollable">
+      <div class="album-item"><img src="img3.jpeg" alt="Runners at Apex Run" loading="lazy" draggable="false"></div>
+      <div class="album-item"><img src="img1.jpeg" alt="Runners at Apex Run" loading="lazy" draggable="false"></div>
+      <div class="album-item"><img src="img2.jpeg" alt="Runners at Apex Run" loading="lazy" draggable="false"></div>
+      <div class="album-item"><img src="img6.jpeg" alt="Runners at Apex Run" loading="lazy" draggable="false"></div>
+      <div class="album-item"><img src="img5.jpeg" alt="Runners at Apex Run" loading="lazy" draggable="false"></div>
+      <div class="album-item"><img src="img4.jpeg" alt="Runners at Apex Run" loading="lazy" draggable="false"></div>
+      <!-- ADD MORE GALLERY ITEMS HERE -->
+    </div>
+
+    <button type="button" class="rail-btn rail-next" aria-label="Next photo" aria-controls="albumScroll">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
   </div>
 
   <div class="album-dots" id="albumDots" aria-hidden="true"></div>
+  <p class="rail-hint">Drag, or use the arrows</p>
 </section>
 
 <!-- ============================
@@ -213,39 +241,49 @@
   <h2 class="gradient-heading reveal" data-reveal="draw">EVENT HIGHLIGHTS</h2>
   <p class="highlights-sub reveal" data-reveal="rise">Moments from Apex Run-2026</p>
 
-  <div class="highlights-marquee" id="highlightsMarquee">
-    <div class="highlights-track" id="highlightsTrack">
+  <div class="rail rail--full" data-rail>
+    <button type="button" class="rail-btn rail-prev" aria-label="Scroll highlights left" aria-controls="highlightsMarquee">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
 
-      <figure class="highlight-item">
-        <img src="highlight1.jpeg" alt="Runners gathering at the start line" loading="lazy">
-      </figure>
+    <div class="highlights-marquee" id="highlightsMarquee" tabindex="0" role="region" aria-label="Event highlights, scrollable">
+      <div class="highlights-track" id="highlightsTrack">
 
-       <figure class="highlight-item">
-        <img src="highlight5.jpeg" alt="Runners gathering at the start line" loading="lazy">
-      </figure>
+        <figure class="highlight-item">
+          <img src="highlight1.jpeg" alt="Runners gathering at the start line" loading="lazy" draggable="false">
+        </figure>
 
-      <figure class="highlight-item">
-        <img src="highlight2.jpeg" alt="Supporters cheering along the route" loading="lazy">
-      </figure>
+        <figure class="highlight-item">
+          <img src="highlight5.jpeg" alt="The field setting off from Milagres College" loading="lazy" draggable="false">
+        </figure>
 
-       <figure class="highlight-item">
-        <img src="highlight6.jpeg" alt="Runners gathering at the start line" loading="lazy">
-      </figure>
+        <figure class="highlight-item">
+          <img src="highlight2.jpeg" alt="Supporters cheering along the route" loading="lazy" draggable="false">
+        </figure>
 
+        <figure class="highlight-item">
+          <img src="highlight6.jpeg" alt="Runners on the coastal stretch of the route" loading="lazy" draggable="false">
+        </figure>
 
-      <figure class="highlight-item">
-        <img src="highlight3.jpeg" alt="Winners receiving medals" loading="lazy">
-      </figure>
+        <figure class="highlight-item">
+          <img src="highlight3.jpeg" alt="Winners receiving medals" loading="lazy" draggable="false">
+        </figure>
 
-      <figure class="highlight-item">
-        <img src="highlight4.jpeg" alt="Volunteers at the hydration point" loading="lazy">
-      </figure>
-         
-         
-      <!-- ADD MORE HIGHLIGHT ITEMS HERE -->
+        <figure class="highlight-item">
+          <img src="highlight4.jpeg" alt="Volunteers at the hydration point" loading="lazy" draggable="false">
+        </figure>
 
+        <!-- ADD MORE HIGHLIGHT ITEMS HERE -->
+
+      </div>
     </div>
+
+    <button type="button" class="rail-btn rail-next" aria-label="Scroll highlights right" aria-controls="highlightsMarquee">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
   </div>
+
+  <p class="rail-hint">Drag to explore, or use the arrows</p>
 </section>
 
 <!-- ============================
@@ -401,11 +439,11 @@
 
     <div class="qr-section">
       <h3>Scan and pay</h3>
-      <img id="qrImage" class="qr-image" style="display:none;" alt="Payment QR code">
-      <p id="qrLabel" class="qr-note">Select a run to view the payment QR</p>
+      <img id="qrImage" class="qr-image" alt="Payment QR code" hidden>
+      <p id="qrLabel" class="qr-note">Select a run to see the payment QR</p>
     </div>
 
-    <div class="form-group" id="utrGroup" style="display:none;">
+    <div class="form-group" id="utrGroup" hidden>
       <h3>Payment confirmation</h3>
       <input type="text" name="utr" id="utrInput" placeholder="Enter UTR / transaction ID">
       <p class="qr-note">Registration completes only after you enter the UTR.</p>
@@ -449,7 +487,7 @@
 ============================ -->
 <section id="contact">
     <h2 class="gradient-heading reveal" data-reveal="draw">FOR MORE INFORMATION</h2>
-    <div class="contact-box">
+    <div class="contact-box" data-stagger>
         <div class="contact-card reveal tilt-card" data-reveal="cascade">
             <strong>Clyde Dsouza</strong>
             <span class="contact-role">Event co-ordinator</span>
@@ -480,13 +518,17 @@
     <p>© APEX RUN '26</p>
 </footer>
 
+<button type="button" class="back-top" id="backTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>
+</button>
+
 <div id="lightbox" class="lightbox">
   <span class="close-btn" role="button" tabindex="0" aria-label="Close image">&times;</span>
   <img class="lightbox-img" src="" alt="">
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
-<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js" defer></script>
+<script src="script.js" defer></script>
 
 </body>
 </html>
