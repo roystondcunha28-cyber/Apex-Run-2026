@@ -470,41 +470,114 @@ document.addEventListener("DOMContentLoaded", () => {
       album._resume = setTimeout(() => { paused = false; }, 5000);
     });
   })();
+  /* Mouse-drag horizontal scrolling. Touch is left to the browser. */
+  function enableDragScroll(el) {
+    let down = false, startX = 0, startScroll = 0, moved = false;
 
+    el.addEventListener("pointerdown", e => {
+      if (e.pointerType === "touch" || e.button !== 0) return;
+      down = true; moved = false;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+    });
 
-  /* =========================================================
-     HIGHLIGHTS MARQUEE
+    el.addEventListener("pointermove", e => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 4) {
+        moved = true;
+        el.classList.add("is-dragging");
+        el.setPointerCapture?.(e.pointerId);
+      }
+      if (moved) { el.scrollLeft = startScroll - dx; e.preventDefault(); }
+    });
+
+    const end = () => { down = false; el.classList.remove("is-dragging"); };
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+    el.addEventListener("pointerleave", end);
+
+    // a drag that ends on an image shouldn't open the lightbox
+    el.addEventListener("click", e => {
+      if (!moved) return;
+      e.preventDefault();
+      e.stopPropagation();
+      moved = false;
+    }, true);
+  }
+
+   /* =========================================================
+     HIGHLIGHTS — real scroll container with a drifting auto-scroll
   ========================================================= */
   (function initHighlights() {
     const marquee = document.getElementById("highlightsMarquee");
     const track   = document.getElementById("highlightsTrack");
     if (!marquee || !track) return;
 
-    if (!prefersReduced) {
-      track.innerHTML += track.innerHTML;             // seamless -50% loop
+    enableDragScroll(marquee);
 
-      const all = Array.from(track.children);
-      all.slice(all.length / 2).forEach(el => el.setAttribute("aria-hidden", "true"));
+    const videos = () => track.querySelectorAll("video");
 
-      // Speed scales with item count, so adding items doesn't speed it up
-      track.style.setProperty("--marquee-duration", (all.length / 2) * 7 + "s");
-    }
-
-    marquee.addEventListener("pointerdown", () => marquee.classList.add("is-paused"));
-    marquee.addEventListener("pointerup", () => {
-      clearTimeout(marquee._resume);
-      marquee._resume = setTimeout(() => marquee.classList.remove("is-paused"), 3500);
-    });
-
-    const videos = track.querySelectorAll("video");
-    if (videos.length && "IntersectionObserver" in window) {
+    function watchVideos() {
+      if (!("IntersectionObserver" in window)) return;
       const vObs = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           entry.isIntersecting ? entry.target.play().catch(() => {}) : entry.target.pause();
         });
       }, { threshold: 0.35 });
-      videos.forEach(v => vObs.observe(v));
+      videos().forEach(v => vObs.observe(v));
     }
+
+    if (prefersReduced) { watchVideos(); return; }
+
+    // duplicate the set so the scroll can wrap without a visible seam
+    track.innerHTML += track.innerHTML;
+    const all = Array.from(track.children);
+    const cloneStart = all[all.length / 2];
+    all.slice(all.length / 2).forEach(el => el.setAttribute("aria-hidden", "true"));
+    watchVideos();
+
+    const SPEED = 34;              // pixels per second
+    let pos = 0, paused = false, last = performance.now();
+
+    const loopPoint = () => cloneStart.offsetLeft;
+
+    function pause() {
+      paused = true;
+      clearTimeout(marquee._resume);
+      marquee._resume = setTimeout(() => { paused = false; }, 3000);
+    }
+
+    ["pointerdown", "wheel", "touchstart", "keydown"].forEach(evt =>
+      marquee.addEventListener(evt, pause, { passive: true })
+    );
+
+    function frame(now) {
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+
+      if (paused || document.hidden) {
+        pos = marquee.scrollLeft;        // stay in sync with the user
+      } else {
+        const wrap = loopPoint();
+        pos += SPEED * dt;
+        if (wrap > 0 && pos >= wrap) pos -= wrap;
+        marquee.scrollLeft = pos;
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+
+    // wrap the other way when the user scrolls back past the start
+    marquee.addEventListener("scroll", () => {
+      const wrap = loopPoint();
+      if (wrap > 0 && marquee.scrollLeft <= 0) {
+        marquee.scrollLeft = wrap - 1;
+        pos = marquee.scrollLeft;
+      }
+    }, { passive: true });
   })();
 
 
