@@ -1,0 +1,87 @@
+name: Checks
+
+# Catches the two mistakes that actually break this site in production:
+#   1. an asset referenced with the wrong capitalisation (works on macOS and
+#      Windows, 404s on GitHub Pages, which is case-sensitive)
+#   2. a fragment link pointing at an id that no longer exists
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  assets:
+    name: Asset paths and anchors
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify every local reference resolves
+        run: |
+          python3 - <<'PY'
+          import re, sys, pathlib
+
+          root = pathlib.Path('.')
+          # exact on-disk names, for case-sensitive comparison
+          on_disk = {p.as_posix() for p in root.rglob('*') if p.is_file()}
+          lower   = {p.lower(): p for p in on_disk}
+
+          problems = []
+
+          for page in sorted(root.glob('*.html')):
+              html = page.read_text(encoding='utf-8')
+              ids  = set(re.findall(r'\bid="([^"]+)"', html))
+
+              refs = re.findall(r'(?:src|href)="([^"]+)"', html)
+              for ref in refs:
+                  if ref.startswith(('http://', 'https://', 'data:', 'mailto:', 'tel:', '//')):
+                      continue
+
+                  if ref.startswith('#'):
+                      target = ref[1:]
+                      if target and target not in ids:
+                          problems.append(f'{page}: anchor "{ref}" has no matching id')
+                      continue
+
+                  path = ref.split('?')[0].split('#')[0].lstrip('./')
+                  if not path:
+                      continue
+
+                  if path in on_disk:
+                      continue
+
+                  actual = lower.get(path.lower())
+                  if actual:
+                      problems.append(
+                          f'{page}: "{path}" is a case mismatch, the file on disk is "{actual}"'
+                      )
+                  else:
+                      problems.append(f'{page}: "{path}" does not exist')
+
+          # url(...) references inside the stylesheet
+          css_file = root / 'style.css'
+          if css_file.exists():
+              css = css_file.read_text(encoding='utf-8')
+              for ref in re.findall(r'url\(["\']?([^"\')]+)["\']?\)', css):
+                  if ref.startswith(('http', 'data:', '//')):
+                      continue
+                  path = ref.split('?')[0].lstrip('./')
+                  if path and path not in on_disk:
+                      actual = lower.get(path.lower())
+                      hint = f', did you mean "{actual}"' if actual else ''
+                      problems.append(f'style.css: "{path}" does not exist{hint}')
+
+          if problems:
+              print('Broken references:\n')
+              for p in problems:
+                  print('  -', p)
+              sys.exit(1)
+
+          print('All local references resolve, with matching case.')
+          PY
+
+      - name: Check the JavaScript parses
+        run: node --check script.js

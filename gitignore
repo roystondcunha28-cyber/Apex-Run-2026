@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+._*
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Image optimiser output — check it, copy it over, don't commit the folder
+optimized/
+
+# Local tooling
+node_modules/
+.env
+*.log
+
+# Source files that shouldn't ship to a web root
+*.psd
+*.ai
+*.fig
+originals/
